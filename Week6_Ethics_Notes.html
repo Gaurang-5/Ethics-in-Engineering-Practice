@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 — Ethics in Engineering Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #faf7f2;
+    --warm-white: #f5f0e8;
+    --accent: #c0392b;
+    --accent-dark: #96281b;
+    --gold: #d4a017;
+    --gold-light: #f0d080;
+    --muted: #6b5c4e;
+    --divider: #d4c9b8;
+    --highlight: #fff8e7;
+    --tag-bg: #2c1810;
+    --tag-text: #f0d080;
+    --note-bg: #fef9ec;
+    --note-border: #d4a017;
+    --correct-bg: #f0faf0;
+    --correct-border: #2d8a4e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(212,160,23,0.04) 30px,
+      rgba(212,160,23,0.04) 60px
+    );
+  }
+  header .course-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.8;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  header h1 span { color: var(--gold-light); }
+  header .subtitle {
+    font-size: 15px;
+    color: rgba(240,208,128,0.7);
+    font-style: italic;
+  }
+  header .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  header .meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(240,208,128,0.6);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  header .meta-item strong { color: var(--gold-light); display: block; font-size: 13px; }
+
+  /* ── NAV / TOC ── */
+  .toc {
+    background: var(--warm-white);
+    border-bottom: 2px solid var(--divider);
+    padding: 28px 40px;
+  }
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 6px 24px;
+  }
+  .toc-grid a {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--divider);
+    transition: color 0.2s;
+  }
+  .toc-grid a:hover { color: var(--accent); }
+  .toc-grid a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--tag-bg);
+    color: var(--gold-light);
+    padding: 2px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ── SECTION ── */
+  section {
+    margin-bottom: 64px;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .lecture-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── SUBSECTION ── */
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin: 32px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 14px; color: #2a1f18; }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-top: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 8px;
+  }
+  .card p { font-size: 14.5px; margin-bottom: 0; line-height: 1.6; }
+
+  /* ── LISTS ── */
+  ul.neat {
+    list-style: none;
+    margin: 12px 0 20px 0;
+  }
+  ul.neat li {
+    padding: 7px 0 7px 22px;
+    position: relative;
+    font-size: 15.5px;
+    border-bottom: 1px solid var(--divider);
+    line-height: 1.55;
+  }
+  ul.neat li:last-child { border-bottom: none; }
+  ul.neat li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+    top: 9px;
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+  .callout strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14.5px;
+  }
+  thead th {
+    background: var(--tag-bg);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  tbody tr:nth-child(even) { background: var(--warm-white); }
+  tbody td { padding: 9px 14px; border-bottom: 1px solid var(--divider); vertical-align: top; }
+  tbody td:first-child { font-weight: 600; color: var(--accent-dark); }
+
+  /* ── Q&A BLOCK ── */
+  .qa-block {
+    border: 1px solid var(--divider);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .qa-block .q {
+    background: var(--tag-bg);
+    color: #fff;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .qa-block .q .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--gold);
+    color: var(--tag-bg);
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-right: 8px;
+  }
+  .qa-block .opts { padding: 14px 18px; background: #fff; }
+  .qa-block .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--muted);
+    border-bottom: 1px dashed var(--divider);
+  }
+  .qa-block .opt:last-child { border-bottom: none; }
+  .qa-block .opt.correct { color: #1a5c2a; font-weight: 600; }
+  .qa-block .opt .letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--divider);
+    padding: 1px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .qa-block .opt.correct .letter {
+    background: #2d8a4e;
+    color: #fff;
+  }
+  .qa-block .answer-why {
+    background: var(--correct-bg);
+    border-top: 1px solid var(--correct-border);
+    padding: 12px 18px;
+    font-size: 13.5px;
+    color: #1a5c2a;
+  }
+  .qa-block .answer-why strong { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* ── HABITS GRID ── */
+  .habits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .habit-card {
+    background: linear-gradient(135deg, var(--tag-bg) 0%, #3d1f10 100%);
+    color: var(--gold-light);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .habit-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .habit-title { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+
+  /* ── LEVELS DIAGRAM ── */
+  .levels {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .level {
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .level.personal { background: #fff5f5; border-left: 4px solid var(--accent); }
+  .level.professional { background: #fffbf0; border-left: 4px solid var(--gold); }
+  .level.macro { background: #f0f8f0; border-left: 4px solid #2d8a4e; }
+  .level-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    min-width: 90px;
+    padding-top: 2px;
+  }
+  .level.personal .level-label { color: var(--accent); }
+  .level.professional .level-label { color: #8a6000; }
+  .level.macro .level-label { color: #2d8a4e; }
+  .level-values { font-size: 14px; color: var(--ink); }
+  .level-values span {
+    display: inline-block;
+    background: rgba(0,0,0,0.06);
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin: 3px 3px 3px 0;
+    font-size: 13.5px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--divider);
+    letter-spacing: 1px;
+  }
+
+  /* ── DIVIDER ── */
+  .ornamental { text-align: center; color: var(--gold); margin: 32px 0; font-size: 18px; letter-spacing: 8px; }
+
+  @media (max-width: 600px) {
+    main { padding: 28px 18px 60px; }
+    header { padding: 40px 20px 36px; }
+    .toc { padding: 20px; }
+    .meta-row { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="course-label">NPTEL · Ethics in Engineering Practice · IIT Kharagpur</div>
+  <h1>Week <span>6</span> Study Notes</h1>
+  <p class="subtitle">Lectures 26–30 · Research Ethics, Engineers as Managers, and Key Questions in Ethical Conduct</p>
+  <div class="meta-row">
+    <div class="meta-item"><strong>Lectures</strong>26 – 30</div>
+    <div class="meta-item"><strong>Assignment</strong>10 / 10</div>
+    <div class="meta-item"><strong>Instructor</strong>Dr. Susmita Mukhopadhyay</div>
+    <div class="meta-item"><strong>Institute</strong>VGSM, IIT Kharagpur</div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-grid">
+    <a href="#lec26"><span class="num">L26</span> Authorship, Citation & Plagiarism</a>
+    <a href="#lec27"><span class="num">L27</span> Engineers as Managers</a>
+    <a href="#lec28"><span class="num">L28</span> Consulting Engineers</a>
+    <a href="#lec29"><span class="num">L29</span> Expert Witnesses & Moral Leaders</a>
+    <a href="#lec30"><span class="num">L30</span> Key Questions — Ethical Conduct</a>
+    <a href="#qa"><span class="num">Q&A</span> Assignment 6 — All 10 Questions</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════ LECTURE 26 -->
+<section id="lec26">
+  <div class="section-header">
+    <div class="section-num">L26</div>
+    <h2><span class="lecture-tag">Lecture 26</span>Responsible Authorship, Citation & Plagiarism</h2>
+  </div>
+
+  <h3>Three Ways to Assign Research Credit</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">📝 Authorship</div>
+      <p>When a person has made a significant intellectual contribution to research design, theory, prototype, or analysis AND has reviewed/approved the final manuscript.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔗 Citation</div>
+      <p>For using someone's previously published work, conference presentations, or prior results. The cited person is <em>not</em> accountable for the new work and usually does not need to give permission.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🙏 Acknowledgement</div>
+      <p>For contributions that are significant but do not qualify as authorship or a citable source — e.g., local expertise, data facilitation, laboratory support.</p>
+    </div>
+  </div>
+
+  <h3>Conditions for Citation</h3>
+  <ul class="neat">
+    <li>Results or ideas drawn from previously published or formally presented work must be cited.</li>
+    <li>Works presented at conferences or disciplinary meetings also require citation.</li>
+    <li>The list of cited works should be complete enough for readers to understand where the research fits.</li>
+    <li>All foundational contributions not part of common knowledge should be cited.</li>
+    <li>Unpublished work (e.g., private correspondence) is cited only when no obtainable written source is available; acknowledgement is often better.</li>
+  </ul>
+
+  <h3>Qualifications for Authorship (IEEE Norms)</h3>
+  <ul class="neat">
+    <li>Significant intellectual contribution to theoretical development, system/experiment design, prototype, or analysis.</li>
+    <li>Contributed to drafting, reviewing, or revising the manuscript.</li>
+    <li>Approved the final version of the manuscript.</li>
+  </ul>
+  <div class="callout">
+    <strong>Key Principle</strong>
+    Authorship makes a person accountable for the entire report. In the absence of specific contribution statements, all authors are equally accountable for the integrity and competence of the research.
+  </div>
+
+  <h3>Categories of Authors</h3>
+  <table>
+    <thead>
+      <tr><th>Category</th><th>Role & Responsibility</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Lead Author</td><td>Holds principal responsibility; made the greatest intellectual contribution; bears responsibility for the whole report.</td></tr>
+      <tr><td>Submitting Author</td><td>Submits the manuscript; deals with journal editors; ensures all authors meet authorship criteria. Often the same as the lead author.</td></tr>
+      <tr><td>Corresponding Author</td><td>The contact person post-publication; receives reprints; often marked with an asterisk (*); usually a co-author.</td></tr>
+      <tr><td>Senior Author</td><td>Ambiguous — usually the most senior in rank or reputation. Not necessarily the lead author.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Plagiarism</h3>
+  <p>Plagiarism is the appropriation of another person's ideas, processes, results, or words without proper credit. It is a serious research misconduct and applies not just to text but also to graphics, tables, and charts.</p>
+
+  <div class="callout">
+    <strong>IEEE Technical Qualifications for Plagiarism (Know for Exam!)</strong>
+    The following are classified as plagiarism — <strong>option C below is NOT plagiarism</strong>:
+  </div>
+
+  <table>
+    <thead><tr><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Full paper copying</td><td>Uncredited verbatim copying of a full paper.</td></tr>
+      <tr><td>Major portion (>20–50%)</td><td>Uncredited verbatim copying of a large portion.</td></tr>
+      <tr><td>Individual elements</td><td>Uncredited verbatim copying of paragraphs, sentences, or illustrations.</td></tr>
+      <tr><td>Improper paraphrasing</td><td>Changing only a few words or rearranging original sentence structure without credit.</td></tr>
+      <tr><td>Credited without delineation</td><td>Copying a major portion with a credit source but <em>without quotation marks</em>.</td></tr>
+      <tr><td style="color: #2d8a4e;">✅ NOT plagiarism</td><td style="color: #2d8a4e;">Paraphrasing while correctly crediting the original author using an in-text citation AND including the full source in the reference list.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Avoiding Authorship Conflicts</h3>
+  <ul class="neat">
+    <li>Early discussions between supervisors and trainees about credit assignment can prevent later conflicts.</li>
+    <li>The order of authors (first, middle, last) should reflect contribution; the first is usually the lead author.</li>
+    <li>Lab heads are not automatically first or last authors — their position depends on their actual contribution.</li>
+  </ul>
+</section>
+
+<div class="ornamental">✦ ✦ ✦</div>
+
+<!-- ══════════════════════════════════════════ LECTURES 27-29 -->
+<section id="lec27">
+  <div class="section-header">
+    <div class="section-num">L27</div>
+    <h2><span class="lecture-tag">Lectures 27–29</span>Engineers as Managers, Consultants & Leaders</h2>
+  </div>
+
+  <h3>Why Engineers Become Managers</h3>
+  <p>Engineers undergo rigorous technical training, but many transition to managerial roles early in their careers — often without formal management training. Two main reasons drive this:</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">🏢 Company Preference</div>
+      <p>Companies prefer engineers who can play a dual role — their technical understanding complements managing tech corporations, and they save the cost of additional manpower.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">💼 Corporate Incentives</div>
+      <p>Management roles offer higher salaries, greater authority, prestige, and recognition. Dual-ladder career paths make these roles attractive.</p>
+    </div>
+  </div>
+
+  <h3>Manager Responsibilities</h3>
+  <ul class="neat">
+    <li>Produce a valuable product while maintaining respect for customers, employees, and the public.</li>
+    <li><strong>Persons and safe products come first — not profits.</strong></li>
+    <li>Two main duties: Promoting an Ethical Climate and Resolving Conflicts.</li>
+  </ul>
+
+  <h3>Promoting an Ethical Climate</h3>
+  <p>An ethical climate is a working environment that complements morally responsible conduct in both short-term and long-term decisions. It is created through a combination of:</p>
+  <ul class="neat">
+    <li>Formal procedures and policies</li>
+    <li>Informal practices and traditions</li>
+    <li>Job attitudes and commitments</li>
+  </ul>
+  <div class="callout">
+    <strong>Exam Note</strong>
+    Informal practices DO play a role in establishing an ethical climate — it is NOT just about formal management directives. (Assignment Q9: Answer is FALSE)
+  </div>
+
+  <h3>7 Most Common Conflicts for Engineering Managers</h3>
+  <table>
+    <thead><tr><th>#</th><th>Conflict Type</th></tr></thead>
+    <tbody>
+      <tr><td>a</td><td>Conflicts over <strong>schedules</strong> — especially when support from other departments is needed</td></tr>
+      <tr><td>b</td><td>Conflicts over <strong>project/department priorities</strong></td></tr>
+      <tr><td>c</td><td>Conflicts over <strong>personnel resources</strong></td></tr>
+      <tr><td>d</td><td>Conflicts over <strong>technical issues</strong> — alternative problem-solving approaches</td></tr>
+      <tr><td>e</td><td>Conflicts over <strong>administrative procedures</strong></td></tr>
+      <tr><td>f</td><td><strong>Personality conflicts</strong></td></tr>
+      <tr><td>g</td><td>Conflicts over <strong>costs</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>4 Principles for Conflict Resolution</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">👥 People</div>
+      <p>Separate the <em>people</em> from the <em>problem</em>. Avoid personality clashes. Every party gets an equal chance to present their view.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Interests</div>
+      <p>Focus on <em>interests</em>, not positions. Come up with solutions that serve the interests of ALL parties concerned, not just those in authority.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Options</div>
+      <p>Generate a variety of options. The best solutions are often creative alternatives, not just compromises that split differences.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">⚖️ Criteria</div>
+      <p>Results should be based on objective, standard criteria. Develop a sense of fairness before applying criteria, or disagreements become contests of will.</p>
+    </div>
+  </div>
+</section>
+
+<section id="lec28">
+  <div class="section-header">
+    <div class="section-num">L28</div>
+    <h2><span class="lecture-tag">Lecture 28</span>Consulting Engineers</h2>
+  </div>
+
+  <p>Consulting engineers work in private practice and are compensated by fees (not salaries), giving them greater decision-making freedom. Key areas of consulting practice:</p>
+
+  <h3>Advertising</h3>
+  <ul class="neat">
+    <li>Engineers must ensure all technical details in ads are accurate — laypeople cannot judge technical accuracy.</li>
+    <li>Deceptive advertising can occur through outright lies, half-truths, false suggestions, hidden implications, ambiguity, or subliminal manipulation.</li>
+    <li>Marketers often hide negative product impacts — engineers must ensure the right information reaches consumers.</li>
+  </ul>
+
+  <h3>Competitive Bidding</h3>
+  <ul class="neat">
+    <li>Engineers were historically prohibited from competitive bidding as insiders could easily submit underpriced bids.</li>
+    <li>Now they are allowed to serve as consultants helping others prepare competitive bids.</li>
+  </ul>
+
+  <h3>Safety and Client Needs</h3>
+  <ul class="neat">
+    <li>Consultants are obligated to care for client safety — especially critical in design-only projects.</li>
+    <li>In design-only projects, the engineer designs but has no supervisory role in construction. This creates safety loopholes when the designer is not available on-site.</li>
+    <li>On-site inspection by the designer during implementation is strongly recommended.</li>
+  </ul>
+</section>
+
+<section id="lec29">
+  <div class="section-header">
+    <div class="section-num">L29</div>
+    <h2><span class="lecture-tag">Lecture 29</span>Expert Witnesses, Advisors & Moral Leadership</h2>
+  </div>
+
+  <h3>Engineers as Expert Witnesses</h3>
+  <table>
+    <thead><tr><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Eye Witness</td><td>Testifies on matters of perceived facts.</td></tr>
+      <tr><td>Expert Witness</td><td>Permitted wider latitude — can comment on facts in their area of expertise AND critique the opposite side's expert testimony. Role is to identify the truth about causes of accidents.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Abuses by Expert Witnesses in Courts</h3>
+  <ul class="neat">
+    <li><strong>Hired Guns:</strong> Giving false or favourable testimony to the party at fault in exchange for money.</li>
+    <li><strong>Financial Bias:</strong> Being paid to redirect investigations away from the truth.</li>
+    <li><strong>Ego Bias:</strong> Over-identifying with one's own side of the dispute.</li>
+    <li><strong>Sympathy Bias:</strong> Being influenced by the emotional drama in courtrooms.</li>
+  </ul>
+
+  <h3>7 Habits of Highly Moral Leaders</h3>
+  <div class="habits-grid">
+    <div class="habit-card"><div class="habit-num">01</div><div class="habit-title">Strong Ethical Character — demonstrate humility, ask for and listen to tough feedback</div></div>
+    <div class="habit-card"><div class="habit-num">02</div><div class="habit-title">Passion to "Do Right" — motivated by ethics, not just performance</div></div>
+    <div class="habit-card"><div class="habit-num">03</div><div class="habit-title">Morally Proactive — anticipate ethical issues before they arise</div></div>
+    <div class="habit-card"><div class="habit-num">04</div><div class="habit-title">Stakeholder Inclusive — consider ALL stakeholders, including latent ones (not just economic actors)</div></div>
+    <div class="habit-card"><div class="habit-num">05</div><div class="habit-title">Obsession with Fairness — act with courage; take a stand on moral issues even at personal risk</div></div>
+    <div class="habit-card"><div class="habit-num">06</div><div class="habit-title">Principled Decision Makers — decisions grounded in clear ethical principles</div></div>
+    <div class="habit-card"><div class="habit-num">07</div><div class="habit-title">Integrate Ethics & Management Wisdom — blend ethical insight with business acumen</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Exam Trap — Erroneous Statements About Moral Leaders (Assignment Q5)</strong>
+    S3 is WRONG: Moral leaders do NOT suppress questioning or use excessive discipline.<br>
+    S5 is WRONG: Moral leaders are stakeholder INCLUSIVE — they consider <em>latent</em> stakeholders, not just economic ones.
+  </div>
+
+  <h3>Functions Engineers Handle as Managers</h3>
+  <p>Engineers as managers must tackle ethical questions at every stage of the product lifecycle:</p>
+  <ul class="neat">
+    <li><strong>Conceptual Design:</strong> Will it be useful? Is it safe for users?</li>
+    <li><strong>Market Study:</strong> Is the study unbiased, or designed to attract investors?</li>
+    <li><strong>Contract:</strong> Are cost and time schedules realistic? Are bids artificially low?</li>
+    <li><strong>Design:</strong> All alternatives explored? Patents checked? User-friendly?</li>
+    <li><strong>Purchasing:</strong> Are parts and materials quality-tested?</li>
+    <li><strong>Manufacturing:</strong> Is the workplace safe and free of toxic emissions?</li>
+    <li><strong>Sale:</strong> Is advertising honest? Is there informed consent?</li>
+    <li><strong>Use:</strong> Are users protected from harm and informed of risks?</li>
+    <li><strong>Maintenance:</strong> Carried out by competent staff? Spare parts available?</li>
+    <li><strong>Decommissioning:</strong> How are toxic wastes and recyclable materials handled?</li>
+  </ul>
+</section>
+
+<div class="ornamental">✦ ✦ ✦</div>
+
+<!-- ══════════════════════════════════════════ LECTURE 30 -->
+<section id="lec30">
+  <div class="section-header">
+    <div class="section-num">L30</div>
+    <h2><span class="lecture-tag">Lecture 30</span>Key Questions — Ethical Conduct of Engineers</h2>
+  </div>
+
+  <h3>What Makes a Good Engineer?</h3>
+  <ul class="neat">
+    <li>Holds the health, safety, and welfare of the public to be of <strong>paramount importance</strong>.</li>
+    <li>Does not compromise in delivering the best services.</li>
+    <li>Is honest and objective in communications with the public about engineering outputs.</li>
+    <li>Acts as a faithful agent for their employer.</li>
+    <li>Avoids deceptive acts.</li>
+    <li>Conducts themselves honorably, responsibly, ethically, and lawfully to enhance the profession.</li>
+  </ul>
+
+  <h3>Core Ethical Values for Engineers</h3>
+  <div class="levels">
+    <div class="level personal">
+      <div class="level-label">Personal</div>
+      <div class="level-values">
+        <span>Honesty</span>
+        <span>Integrity</span>
+        <span>Fairness</span>
+      </div>
+    </div>
+    <div class="level professional">
+      <div class="level-label">Professional</div>
+      <div class="level-values">
+        <span>Competence</span>
+        <span>Ensuring Quality</span>
+        <span>Ensuring Safety</span>
+      </div>
+    </div>
+    <div class="level macro">
+      <div class="level-label">Macro / Society</div>
+      <div class="level-values">
+        <span>Promoting Sustainability</span>
+        <span>Environmental Protection</span>
+        <span>Public Welfare</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Detailed Ethical Values</h3>
+  <table>
+    <thead><tr><th>Value</th><th>Meaning for Engineers</th></tr></thead>
+    <tbody>
+      <tr><td>Honesty</td><td>Do not mislead or deceive employers or stakeholders. Approving low-quality materials for personal gain is unacceptable. Not all lies are unethical (e.g., undercover law enforcement), but such exceptions are rare.</td></tr>
+      <tr><td>Integrity</td><td>Consistent ethical behaviour across all situations — at home and at work. An engineer with integrity will not accept bribes to approve designs that harm consumers.</td></tr>
+      <tr><td>Reliability</td><td>Ethical responsibility goes beyond the legal contract. Fulfilling promises and making reasonable efforts to honour commitments builds reliability.</td></tr>
+      <tr><td>Loyalty</td><td>Protect the interests of organizations and the public; safeguard confidential information; never disclose trade secrets; make decisions on merit, not personal interest.</td></tr>
+      <tr><td>Responsibility</td><td>Being accountable for the choices you make. Others rely on engineers' knowledge and willingness to perform tasks safely and effectively.</td></tr>
+      <tr><td>Fairness</td><td>A range of morally justifiable outcomes rather than one "right" answer. Choices must consider the interests of all stakeholders, not just self-interest.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Two Key Knowledge Values in Engineering</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">🔍 Truth</div>
+      <p>Not being deceptive to self or others. Using knowledge to make truthful disclosures. Engineering societies including ASCE, NSPE, ASME, and ACM all require engineers to issue statements only in an objective and truthful manner.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Accuracy</div>
+      <p>Judgments must be supported by facts and results, not mere opinion. Engineers shall include all relevant and pertinent information in reports, statements, or testimony.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Inspiring Story — Satyendra Dubey</strong>
+    A project engineer at NHAI who exposed large-scale corruption in highway construction and wrote directly to PM Atal Bihari Vajpayee detailing financial irregularities. He was shot dead on November 27, 2003 in Gaya — a tragic example of an engineer who upheld ethical values at enormous personal cost.
+  </div>
+</section>
+
+<div class="ornamental">✦ ✦ ✦</div>
+
+<!-- ══════════════════════════════════════════ Q&A -->
+<section id="qa">
+  <div class="section-header">
+    <div class="section-num">Q&A</div>
+    <h2>Assignment 6 — All 10 Questions with Answers & Explanations</h2>
+  </div>
+  <p style="margin-bottom:24px; color: var(--muted); font-size: 14.5px;">Score: 10/10 ✅ — Study these carefully; they reveal exactly what the exam tests.</p>
+
+  <!-- Q1 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q1</span> Varnali (quiet, private) and Roberta (gregarious, loud) clash due to personality differences. Roberta reprimands Varnali for not smiling with clients. The conflict has arisen out of —</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> Conflicts over administrative procedures</div>
+      <div class="opt"><span class="letter">b</span> Conflicts over personnel resources</div>
+      <div class="opt correct"><span class="letter">c</span> Personality conflicts ✓</div>
+      <div class="opt"><span class="letter">d</span> None of the above</div>
+    </div>
+    <div class="answer-why"><strong>Why C?</strong> The conflict stems entirely from clashing personality types — one private and reserved, the other gregarious and inquisitive. No procedural or resource dispute is involved. This maps directly to type (f) in the 7 common conflicts list: Personality conflicts.</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q2</span> The diagram shows Party A's position → Interest ↔ Party X's Interest converging into Mutual Interest. This depicts —</div>
+    <div class="opts">
+      <div class="opt correct"><span class="letter">a</span> Conflict resolution technique ✓</div>
+      <div class="opt"><span class="letter">b</span> Ethical decision technique</div>
+      <div class="opt"><span class="letter">c</span> Personality test</div>
+      <div class="opt"><span class="letter">d</span> None of the above</div>
+    </div>
+    <div class="answer-why"><strong>Why A?</strong> The diagram illustrates the "Interest-based" conflict resolution principle — moving away from stated positions and focusing on underlying interests to find mutual ground. This is one of the 4 key principles for conflict resolution (Interests: focus on interests, not positions).</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q3</span> Identify the role(s) solely expected from engineers as managers (from the given list of 6 functions i–vi).</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> (iii),(v),(vi)</div>
+      <div class="opt"><span class="letter">b</span> (iv),(v),(vi)</div>
+      <div class="opt"><span class="letter">c</span> (iii),(iv),(v)</div>
+      <div class="opt correct"><span class="letter">d</span> (i),(iv),(v) ✓</div>
+    </div>
+    <div class="answer-why"><strong>Why D?</strong> Function (i) — conceptual design (assessing user-friendliness and safety), (iv) — maintenance standardization (standardizing brands of equipment for plant availability), and (v) — procurement optimization. Functions iii (monthly financial reports), v (procurement), and vi (tax returns/expense reports) are more generic management/accounting roles not uniquely tied to engineers as managers.</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q4</span> A salesperson claims a new air purifier emits silver nano-particles to ward off germs, but it actually does not. This is a case of —</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> Bandwagon advertising</div>
+      <div class="opt"><span class="letter">b</span> Patriarchal advertising</div>
+      <div class="opt correct"><span class="letter">c</span> Deceptive advertising ✓</div>
+      <div class="opt"><span class="letter">d</span> Out of home advertising</div>
+    </div>
+    <div class="answer-why"><strong>Why C?</strong> The salesperson made a false technical claim — asserting a feature (silver nano-particles) that the product does not have. This is a direct example of deceptive advertising through outright lies, which engineers have a moral responsibility to prevent.</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q5</span> Identify the erroneous statement(s) about the features of moral leaders (S1–S6).</div>
+    <div class="opts">
+      <div class="opt correct"><span class="letter">a</span> Statement 3 and 5 are erroneous ✓</div>
+      <div class="opt"><span class="letter">b</span> Statements 5 and 6 are erroneous</div>
+      <div class="opt"><span class="letter">c</span> Statements 1 and 3 are erroneous</div>
+      <div class="opt"><span class="letter">d</span> Statements 4, 2 and 6 are erroneous</div>
+    </div>
+    <div class="answer-why"><strong>Why A?</strong> S3 says moral leaders "will not give any opportunity to question their decision and use excessive discipline" — this is FALSE; moral leaders invite challenge and feedback. S5 says moral leaders are "stakeholder exclusive" — this is FALSE; they are stakeholder INCLUSIVE, considering latent stakeholders too. S6 (obsession with fairness) and all others are correct.</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q6</span> Prof Das, while collaborating with PhD student Sujatha, discards 90% of her writing, uses only her data, and is implicitly becoming the lead author. Sujatha is contemplating discontinuing. This is a case of —</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> Cutting corners</div>
+      <div class="opt correct"><span class="letter">b</span> Conflict of interest ✓</div>
+      <div class="opt"><span class="letter">c</span> Evaluation apprehension</div>
+      <div class="opt"><span class="letter">d</span> Machiavellianism</div>
+    </div>
+    <div class="answer-why"><strong>Why B?</strong> There is a direct conflict of interest — Prof Das's goals (becoming lead author, using only the data) conflict with Sujatha's interests (credit for her intellectual and written work). The situation highlights how research collaborations can create authorship conflicts when not addressed early.</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q7</span> The following are technical qualifications for plagiarism per IEEE (identify which is NOT plagiarism). [Correct answer marked below]</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> Uncredited verbatim copying of >50% of a paper</div>
+      <div class="opt"><span class="letter">b</span> Uncredited verbatim copying of individual elements (up to 20%)</div>
+      <div class="opt correct"><span class="letter">c</span> Paraphrasing while correctly crediting the original author with in-text citation AND full reference list ✓</div>
+      <div class="opt"><span class="letter">d</span> Credited verbatim copying of a major portion without quotation marks</div>
+    </div>
+    <div class="answer-why"><strong>Why C?</strong> Option C describes the correct, ethical way to use someone's work — proper paraphrasing with full attribution. This is NOT plagiarism. Options A, B, and D all describe forms of plagiarism (uncredited or improperly delineated copying).</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q8</span> Out of S1–S4 about authorship, identify the correct True/False combination. (S1: credit assigned via authorship, citation, acknowledgement is True/False; S2: Lead author holds principal responsibility…; S3: Senior author's authorship obtained by offer of another author…; S4: Submitting author deals with journal editors…)</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> (S1–F),(S2-T),(S3-T),(S4-T)</div>
+      <div class="opt"><span class="letter">b</span> (S1–T),(S2-F),(S3-F),(S4-F)</div>
+      <div class="opt"><span class="letter">c</span> (S1–F),(S2-T),(S3-F),(S4-F)</div>
+      <div class="opt correct"><span class="letter">d</span> (S1–T),(S2-T),(S3-F),(S4-T) ✓</div>
+    </div>
+    <div class="answer-why"><strong>Why D?</strong> S1 (T): Credit is assigned via authorship, citation, and acknowledgement — correct. S2 (T): Lead/first author holds principal responsibility and made the greatest intellectual contribution — correct. S3 (F): "Senior author" does NOT refer to authorship obtained by offer of another author for ulterior motives — that would be an abuse. Senior author is simply the most senior in rank/reputation. S4 (T): Submitting author deals with journal editors and receives all notifications — correct.</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q9</span> "In establishing an ethical climate, informal practices have no role to play; management should lay down every step formally." — True or False?</div>
+    <div class="opts">
+      <div class="opt"><span class="letter">a</span> True</div>
+      <div class="opt correct"><span class="letter">b</span> False ✓</div>
+    </div>
+    <div class="answer-why"><strong>Why False?</strong> An ethical climate is created through a COMBINATION of formal procedures/policies AND informal practices, traditions, job attitudes, and commitments. Informal practices are an essential part of building an ethical organizational culture — not irrelevant.</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="qa-block">
+    <div class="q"><span class="badge">Q10</span> Dr. Priya Anand's research on Dokra art was facilitated by Anupam Das (local scholar) who helped establish rapport with artisans and planned data collection schedules. While writing the paper, Priya contemplates how to share academic credit with Anupam. The most appropriate form of credit is —</div>
+    <div class="opts">
+      <div class="opt correct"><span class="letter">a</span> Acknowledgment ✓</div>
+      <div class="opt"><span class="letter">b</span> Citation</div>
+      <div class="opt"><span class="letter">c</span> Authorship</div>
+      <div class="opt"><span class="letter">d</span> None of the above</div>
+    </div>
+    <div class="answer-why"><strong>Why A (Acknowledgment)?</strong> Anupam's contribution — establishing rapport with artisans and scheduling data collection — is significant but does not meet the bar for authorship (which requires intellectual contribution to theory, design, analysis, AND manuscript review). There is also no prior citable publication to cite. An acknowledgement is the appropriate credit for facilitative support that does not qualify as authorship or citation.</div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  NPTEL · Ethics in Engineering Practice · Week 6 · Dr. Susmita Mukhopadhyay, VGSM IIT Kharagpur
+  <br>Study notes compiled from lecture slides (Lectures 26–30) and Assignment 6
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethics in Engineering Practice – Week 7 Notes</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #c0392b;
+    --highlight: #f0f4ff;
+    --card: #ffffff;
+    --border: #d0d8e8;
+    --tag-bg: #eaf0fb;
+    --tag-color: #1a3a5c;
+    --warn: #fff3cd;
+    --warn-border: #ffc107;
+    --tip: #e8f5e9;
+    --tip-border: #4caf50;
+    --text: #222;
+    --muted: #555;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 60%, var(--accent));
+    color: #fff;
+    padding: 36px 40px 28px;
+    border-bottom: 5px solid var(--accent);
+  }
+  header h1 { font-size: 1.7rem; font-weight: 700; }
+  header p { margin-top: 6px; opacity: 0.85; font-size: 0.97rem; }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    padding: 2px 14px;
+    font-size: 0.82rem;
+    margin-top: 10px;
+    letter-spacing: 0.03em;
+  }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 28px 36px 0;
+    padding: 20px 28px;
+    max-width: 900px;
+  }
+  .toc h3 { color: var(--primary); font-size: 1rem; margin-bottom: 10px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .toc a { color: var(--accent); text-decoration: none; font-size: 0.93rem; }
+  .toc a:hover { text-decoration: underline; }
+  main { max-width: 900px; margin: 28px auto 60px; padding: 0 24px; }
+  .section {
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 30px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(26,58,92,0.06);
+  }
+  .section-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-header .num {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 800; flex-shrink: 0;
+  }
+  .section-body { padding: 22px 28px; }
+  h3 { color: var(--primary); font-size: 1rem; margin: 18px 0 8px; border-left: 4px solid var(--accent); padding-left: 10px; }
+  h3:first-child { margin-top: 0; }
+  p { margin-bottom: 12px; font-size: 0.96rem; color: #333; }
+  ul, ol { padding-left: 22px; margin-bottom: 12px; }
+  li { margin: 5px 0; font-size: 0.95rem; color: #333; }
+  .definition {
+    background: var(--highlight);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.95rem;
+  }
+  .definition strong { color: var(--primary); }
+  .warn-box {
+    background: var(--warn);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 0.94rem;
+  }
+  .tip-box {
+    background: var(--tip);
+    border-left: 4px solid var(--tip-border);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 0.94rem;
+  }
+  .case-box {
+    background: #fafafa;
+    border: 1px dashed #aab;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  .case-box .case-title {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 0.97rem;
+    margin-bottom: 8px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    border-radius: 4px;
+    padding: 1px 9px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 2px 2px 2px 0;
+    border: 1px solid var(--border);
+  }
+  .pq {
+    background: #fff8f0;
+    border: 1px solid #f5c518;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .pq .pq-title { font-weight: 700; color: #a06000; font-size: 0.9rem; margin-bottom: 6px; }
+  .pq ul { margin: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  th {
+    background: var(--primary);
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: var(--highlight); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .summary-card {
+    background: var(--highlight);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .summary-card h4 { color: var(--accent); font-size: 0.92rem; margin-bottom: 6px; }
+  .summary-card p { font-size: 0.89rem; margin: 0; color: #444; }
+  @media(max-width:600px){
+    main { padding: 0 10px; }
+    header { padding: 22px 16px; }
+    .toc { margin: 16px 10px 0; }
+    .section-body { padding: 16px 14px; }
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ Ethics in Engineering Practice</h1>
+  <p>NPTEL | IIT Kharagpur | Dr. Susmita Mukhopadhayay</p>
+  <div class="badge">📚 Week 7 — Comprehensive Study Notes</div>
+</header>
+
+<div class="toc">
+  <h3>📋 Table of Contents</h3>
+  <ol>
+    <li><a href="#sec1">Ethical Conduct of Engineers – Key Questions (Lectures 31–32)</a></li>
+    <li><a href="#sec2">Central Professional Responsibilities of Engineers (Lectures 32–33)</a></li>
+    <li><a href="#sec3">Rights & Responsibilities Regarding IPR (Lectures 34–35)</a></li>
+    <li><a href="#sec4">Assignment 7 – Question-Wise Analysis</a></li>
+    <li><a href="#sec5">Quick Revision Summary</a></li>
+  </ol>
+</div>
+
+<main>
+
+<!-- SECTION 1 -->
+<div class="section" id="sec1">
+  <div class="section-header"><span class="num">1</span>Ethical Conduct of Engineers – Key Concepts (Lectures 31–32)</div>
+  <div class="section-body">
+
+    <h3>🔑 What Makes a Good Engineer?</h3>
+    <p>A good engineer goes beyond technical skill — they uphold ethical values and take responsibility for the impact of their work on society. Key questions to reflect on:</p>
+    <ul>
+      <li>What values underlie engineering practice today?</li>
+      <li>Which values are specifically <em>ethical</em> values?</li>
+      <li>How do these values shape who you become as a professional?</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h3>🔑 Religious vs. Ethical Values — How Are They Related?</h3>
+    <p>Most major world religions uphold both religious <em>and</em> ethical standards simultaneously. Key points:</p>
+    <ul>
+      <li>Ethical standards from religion apply to <strong>moral agents</strong> — their character traits, motives, and actions.</li>
+      <li>Religions differ in emphasis: some focus on individual spiritual virtue, others on family structure or communal practice.</li>
+      <li>Religions often provide personal guidance on what individuals are "called" to do — overlapping significantly with professional ethics.</li>
+    </ul>
+    <div class="tip-box">💡 <strong>Key Insight:</strong> Religion and ethics are related but not identical. Both guide conduct, but ethical reasoning in engineering must be objective, evidence-based, and universally applicable — beyond any single faith tradition.</div>
+
+    <hr class="divider">
+
+    <h3>🔑 Ethical Subjectivism — What Is It and How Do We Handle It?</h3>
+    <div class="definition">
+      <strong>Ethical Subjectivism:</strong> The view that whether an act is right or wrong is determined solely by whether the agent performing it <em>believes</em> it to be right or wrong — without any objective standard.
+    </div>
+    <p>This is problematic because it makes ethics entirely personal with no shared accountability. To tackle it, we use established ethical theories:</p>
+    <table>
+      <tr><th>Theory</th><th>Core Idea</th></tr>
+      <tr><td><strong>Utilitarianism</strong></td><td>An act is right if it produces the greatest good for the greatest number.</td></tr>
+      <tr><td><strong>Duty Ethics (Deontology)</strong></td><td>Certain acts are inherently right/wrong, regardless of consequences.</td></tr>
+      <tr><td><strong>Rights Ethics</strong></td><td>Acts must respect fundamental human rights.</td></tr>
+      <tr><td><strong>Virtue Ethics</strong></td><td>Focus on developing good character traits (virtues) rather than following rules.</td></tr>
+    </table>
+
+    <hr class="divider">
+
+    <h3>🔑 Ethical Judgments vs. Intuition</h3>
+    <div class="definition">
+      <strong>Intuition:</strong> The ability to immediately recognise what is going on in a situation — often a product of training or experience.
+    </div>
+    <div class="definition">
+      <strong>Ethical Judgment:</strong> Requires explicit reasons/evidence or argument to demonstrate that something is ethically acceptable or desirable.
+    </div>
+    <p>What distinguishes a <em>judgment</em> from <em>intuition</em> is the availability of explicit reasons or identifiable evidence. Ethical evaluation is a judgment about how good or bad something is, ethically speaking.</p>
+
+    <hr class="divider">
+
+    <h3>🔑 What Makes an Act Morally Justified?</h3>
+    <p>A reasoned moral judgment will consider some or all of the following criteria:</p>
+    <ul>
+      <li>✅ The act produces <strong>good consequences</strong> (or avoids bad ones)</li>
+      <li>✅ It <strong>respects rights</strong> rather than violating them</li>
+      <li>✅ It <strong>fulfills obligations</strong> rather than shirking them</li>
+      <li>✅ It <strong>honors agreements and promises</strong></li>
+      <li>✅ It <strong>fosters virtues</strong> (positive character traits) rather than vices</li>
+    </ul>
+    <div class="warn-box">⚠️ <strong>Exam Note:</strong> The course specifically states that consequences upon people's <em>character</em> (virtues/vices) are considered <em>separately</em> from other consequences. All the above together make an act morally justified — this is the accepted answer for Assignment Q10.</div>
+
+    <hr class="divider">
+
+    <h3>🔑 Justifications vs. Excuses for an Action</h3>
+    <p>Consider a scenario where you are criticised for how you installed a component:</p>
+    <table>
+      <tr><th>Response</th><th>Type</th><th>Why</th></tr>
+      <tr><td>"That's what the safety code required."</td><td>Justification</td><td>Shows the act was correct and required</td></tr>
+      <tr><td>"I was given the task late — no time to do it differently."</td><td>Excuse</td><td>Acknowledges wrong but reduces blame (not in full control)</td></tr>
+      <tr><td>"This was my first time, I made mistakes."</td><td>Excuse</td><td>Partial reduction of blame — lack of control/experience</td></tr>
+      <tr><td>"If you don't like it, do it yourself."</td><td>Neither</td><td>Deflection — no ethical weight</td></tr>
+    </table>
+
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section" id="sec2">
+  <div class="section-header"><span class="num">2</span>Central Professional Responsibilities of Engineers (Lectures 32–33)</div>
+  <div class="section-body">
+
+    <h3>🔑 What Makes a Professional Trustworthy?</h3>
+    <p>In today's era of specialised knowledge, society depends on professionals — especially engineers — for safety, health, and well-being. Two benchmarks of trustworthiness:</p>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>1. Exercising Moral Judgment</h4>
+        <p>Taking into account a range of factors, applying professional knowledge, and devising the best course of action in the circumstances.</p>
+      </div>
+      <div class="summary-card">
+        <h4>2. Taking Moral &amp; Professional Responsibility</h4>
+        <p>Considering all competing factors that might influence the outcome and owning accountability for results.</p>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong>Trustworthy practice</strong> requires sustained attention to the well-being of others AND the knowledge/wisdom to promote or safeguard that well-being.</div>
+
+    <h3>🔑 Case Study: Captain Sullenberger — An Exemplary Response</h3>
+    <div class="case-box">
+      <div class="case-title">🛬 Landing a Disabled Plane (US Air Flight 1549, Jan 15, 2009)</div>
+      <p>Within 90 seconds of takeoff, both engines were disabled by a bird strike. Captain "Sully" Sullenberger took control, decided against returning to the airport, and successfully ditched the plane in the Hudson River — with no loss of life. He demonstrated <em>practical wisdom</em>, courage, and steadfastness, and was last to exit the aircraft.</p>
+      <p><strong>Lesson:</strong> He integrated theoretical knowledge, practical experience, and ethical responsibility — his first professional duty was the safety of those on board.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h3>🔑 Moral Responsibility vs. Official Responsibility</h3>
+    <div class="definition">
+      <strong>Moral Responsibility:</strong> A person must exercise judgment and care to achieve or maintain a desirable state of affairs in matters entrusted to them.
+    </div>
+    <div class="definition">
+      <strong>Official (Job) Responsibility:</strong> Clearly stated duties defined in a job description or position — what one is explicitly told to do.
+    </div>
+    <table>
+      <tr><th>Dimension</th><th>Moral Responsibility</th><th>Official Responsibility</th></tr>
+      <tr><td>Source</td><td>Ethics, professional standards</td><td>Job description, employer directives</td></tr>
+      <tr><td>Scope</td><td>Broader — may go beyond the job</td><td>Limited to defined duties</td></tr>
+      <tr><td>Example</td><td>Reporting a safety hazard not in your brief</td><td>Submitting the project report on time</td></tr>
+    </table>
+    <div class="warn-box">⚠️ <strong>Critical Point:</strong> Moral responsibility does NOT reduce to official responsibility. "I was just doing my job" is NOT a valid ethical excuse for unethical behaviour in adults.</div>
+
+    <hr class="divider">
+
+    <h3>🔑 Official vs. Moral Responsibility: Key Distinction</h3>
+    <p>S1 in the assignment stated: "Official responsibility and moral responsibility are very similar in nature and can be used interchangeably." — This is <strong>FALSE</strong>. They are distinct concepts. The correct combination from the assignment is:</p>
+    <ul>
+      <li>S1 — False (they are NOT interchangeable)</li>
+      <li>S2 — True (moral responsibility requires exercising judgment and care)</li>
+      <li>S3 — True (moral responsibility cannot simply be transferred)</li>
+      <li>S4 — False (official responsibility CAN have immoral connotations)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h3>🔑 What a Trustworthy Structural Engineer Must Check</h3>
+    <p>Before greenlighting any project, a trustworthy structural engineer must verify:</p>
+    <ul>
+      <li>Proficiency in structural design; understanding of building material characteristics</li>
+      <li>Understanding of traffic demands relative to material strength</li>
+      <li>Understanding of environmental implications of the work</li>
+      <li>Estimate of likelihood and severity of natural threats (earthquakes, hurricanes, etc.)</li>
+      <li>Public safety, public convenience, and environmental protection concerns</li>
+      <li>Other technologies that might influence the structure's use</li>
+      <li>Potential intentional threats (sabotage, terrorism)</li>
+    </ul>
+    <div class="warn-box">⚠️ <strong>Assignment Q6 trap:</strong> "An estimate of the likelihood and severity of earthquakes is NOT required as such natural disasters are less frequent" — this is the <strong>INCORRECT</strong> statement. Engineers MUST estimate these risks. Answer: <strong>(d)</strong></div>
+
+    <hr class="divider">
+
+    <h3>🔑 Responsibility for Safety — The Emerging Consensus</h3>
+    <p>Engineering codes of ethics from five major societies — <strong>ASCE, ASME, AIChE, NSPE, and NCEES</strong> — all state:</p>
+    <div class="definition">
+      <strong>"Engineers, in the fulfillment of their professional duties, shall hold paramount the safety, health, and welfare of the public."</strong>
+    </div>
+    <p>Similar to medicine's "First, do no harm" — engineers must first ensure a system doesn't do what you don't want it to do (safety), then ensure it does what you want (performance).</p>
+
+    <hr class="divider">
+
+    <h3>🔑 Causal vs. Moral vs. Professional Responsibility</h3>
+    <table>
+      <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td><strong>Causal</strong></td><td>You physically caused the outcome</td><td>You designed the faulty component</td></tr>
+      <tr><td><strong>Moral</strong></td><td>You have an ethical obligation to act/prevent</td><td>You must report the hazard even if not your job</td></tr>
+      <tr><td><strong>Professional</strong></td><td>Arises from special knowledge of your profession</td><td>As a licensed engineer, you are responsible for public safety</td></tr>
+    </table>
+    <div class="warn-box">⚠️ <strong>Assignment Q3:</strong> The state environmental engineer's scenario — the correct answer is <strong>(d) Both B &amp; C</strong> — both moral AND professional responsibility apply, not just professional (c) alone.</div>
+
+    <hr class="divider">
+
+    <h3>🔑 Whistle-Blowing</h3>
+    <div class="definition">
+      <strong>Whistle-Blowing:</strong> An engineer taking a safety concern <em>outside</em> their organisation when internal channels have failed to address it.
+    </div>
+    <p>Key conditions for whistle-blowing to be <strong>justified</strong>:</p>
+    <ul>
+      <li>Concerns have already been reported to immediate superiors with no satisfactory response within a reasonable time ✅</li>
+      <li>There is clear evidence of wrongdoing, properly documented</li>
+      <li>A significant threat to human life or health exists</li>
+      <li>The person is a current or former employee OR has a close link to the organisation</li>
+    </ul>
+    <div class="warn-box">⚠️ Whistle-blowing is <em>not</em> justified when: no potential harm is identified; data is inadequate and not properly documented; it might jeopardise national interests without sufficient cause.</div>
+    <p>Whistle-blowing always marks <strong>organisational failure</strong> — the ideal is that safety concerns are resolved internally before escalation becomes necessary.</p>
+
+    <hr class="divider">
+
+    <h3>🔑 Software Engineers and Safety</h3>
+    <p>For software engineers, the central responsibility is framed differently than for civil/mechanical engineers:</p>
+    <ul>
+      <li>The core concern is <strong>bugs and glitches</strong> rather than safety hazards per se</li>
+      <li>This is because bugs' harmful effects depend heavily on the broader system context — harder to predict than mechanical failures</li>
+      <li>A software engineer's responsibility is best described as: <strong>avoid all errors that produce bugs/glitches</strong> — rather than only preventing specific safety-threatening bugs</li>
+    </ul>
+
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section" id="sec3">
+  <div class="section-header"><span class="num">3</span>Rights & Responsibilities Regarding Intellectual Property Rights (Lectures 34–35)</div>
+  <div class="section-body">
+
+    <h3>🔑 What Is Intellectual Property?</h3>
+    <p>Intellectual labour involved in creating research, artistic, and technological works provides the basis for property rights. Key distinctions:</p>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>Property Right (Patent/Copyright)</h4>
+        <p>The legal right to control use, sale, or reproduction of the work. Belongs to employer/client if work was done for pay.</p>
+      </div>
+      <div class="summary-card">
+        <h4>Credit (Attribution)</h4>
+        <p>Acknowledgement of who actually created or invented the work. Belongs to the actual creator regardless of who owns the IP.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h3>🔑 Patent</h3>
+    <div class="definition">
+      <strong>Patent:</strong> A contract between the individual inventor and society (all others). The inventor receives exclusive rights for a period; in return, the invention is publicly disclosed.
+    </div>
+    <p>Patent protects the <em>invention/process</em> itself. Under industrial design patent, only the <strong>non-functional ornamental/aesthetic features</strong> can be patented — not functional features.</p>
+    <div class="warn-box">⚠️ <strong>Assignment Q9 — Tea Cup Example:</strong> A tea cup has functional features (hollow receptacle, handle) AND unique ornamentation. Under industrial design patent, only the <strong>ornamentation on the body</strong> can be patented — answer: <strong>(a)</strong></div>
+
+    <hr class="divider">
+
+    <h3>🔑 Copyright</h3>
+    <div class="definition">
+      <strong>Copyright:</strong> A legal right to exclusive publication, production, sale, or distribution of a work. Protects the <em>expression</em> of an idea — NOT the idea itself.
+    </div>
+    <ul>
+      <li>Typically held by author, composer, or publisher</li>
+      <li>Can be assigned or inherited — copyright holder need not be the original creator</li>
+      <li><strong>Ideas cannot be copyrighted</strong> — only their specific expression</li>
+      <li><strong>Fair Use:</strong> Copying is permissible if it does not undermine the copyright holder's interests AND is in the public interest (e.g., education)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h3>🔑 NSPE Code of Ethics on Intellectual Property</h3>
+    <p>The National Society of Professional Engineers (NSPE) code on IP addresses both ownership AND fair credit. Key obligations:</p>
+    <ul>
+      <li>Engineers shall name individuals responsible for designs, inventions, or other accomplishments <em>whenever possible</em></li>
+      <li>Client-supplied designs remain the client's property — cannot be duplicated without permission</li>
+      <li>Before undertaking work that may result in patents/copyrights, enter a clear agreement regarding ownership</li>
+      <li>Designs, data, and records exclusively related to an employer's work are the employer's property</li>
+    </ul>
+    <div class="tip-box">💡 <strong>Assignment Q8:</strong> The NSPE's code of ethics on intellectual property gives standards for fairly crediting others as well — going beyond just proprietary/ownership interests. Answer: <strong>(a) National Society of Professional Engineers</strong></div>
+
+    <hr class="divider">
+
+    <h3>🔑 NCEES — Full Form (Frequently Tested!)</h3>
+    <div class="definition">
+      <strong>NCEES = National Council for Engineering Examiners and Surveyors</strong>
+    </div>
+    <p>One of the five engineering societies whose code of ethics mandates holding public safety paramount.</p>
+
+    <hr class="divider">
+
+    <h3>🔑 Proprietary Knowledge — What Is It?</h3>
+    <p>Information can be proprietary if it is:</p>
+    <ul>
+      <li>A <strong>trade secret</strong> (confidential business plan, proprietary process)</li>
+      <li>A <strong>patented device or process</strong></li>
+      <li><strong>Copyrighted code</strong></li>
+    </ul>
+    <p>Engineers and computer professionals must distinguish between standard design elements (freely usable) and customised, patented, or confidential knowledge belonging to a specific employer or client.</p>
+
+    <hr class="divider">
+
+    <h3>🔑 Whistle-Blower Protection and Anti-Corruption</h3>
+    <div class="definition">
+      <strong>Assertion:</strong> Whistle-blower protection is crucial for the success of anti-corruption detection.<br>
+      <strong>Reason:</strong> Retaliation against whistle-blowers can happen regardless of the channels they use to report corruption, so the relevant organisation should provide protection.
+    </div>
+    <div class="tip-box">💡 Both A and R are true, AND R is the correct explanation of A. <strong>Answer: (a)</strong></div>
+
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section" id="sec4">
+  <div class="section-header"><span class="num">4</span>Assignment 7 — Question-Wise Analysis</div>
+  <div class="section-body">
+
+    <div class="pq">
+      <div class="pq-title">Q1 — Patent as a Contract</div>
+      <p><strong>Statement:</strong> Patent is a contract between the individual (inventor) and the society (all others).</p>
+      <p>✅ <strong>Answer: (a) True</strong> — A patent is precisely this: exclusive rights in exchange for public disclosure.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q2 — Whistle-Blower Assertion-Reason</div>
+      <p><strong>Assertion:</strong> Whistle-blower protection is crucial for anti-corruption detection.<br>
+      <strong>Reason:</strong> Retaliation can occur regardless of reporting channels.</p>
+      <p>✅ <strong>Answer: (a)</strong> — Both A and R are true, and R correctly explains A.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q3 — Type of Responsibility (Environmental Engineer)</div>
+      <p>A state environmental engineer is asked to assess if a power plant meets Clean Air Act requirements (sulfur dioxide, nitrous oxide reduction). What type of responsibility is this?</p>
+      <p>✅ <strong>Answer: (d) Both B &amp; C</strong> — Both Moral responsibility and Professional responsibility. The engineer has both an ethical duty (moral) and a knowledge-based duty (professional) to ensure public safety.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q4 — True/False Combination (S1–S4)</div>
+      <ul>
+        <li>S1: Official and moral responsibility are interchangeable → <strong>FALSE</strong></li>
+        <li>S2: Moral responsibility requires judgment and care → <strong>TRUE</strong></li>
+        <li>S3: Moral responsibility cannot be simply transferred → <strong>TRUE</strong></li>
+        <li>S4: Official responsibility can never have immoral connotations → <strong>FALSE</strong></li>
+      </ul>
+      <p>✅ <strong>Answer: (b) S1-F, S2-T, S3-T, S4-F</strong></p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q5 — Full Form of NCEES</div>
+      <p>✅ <strong>Answer: (c) National Council for Engineering Examiners and Surveyors</strong></p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q6 — Trustworthy Structural Engineer (Exception)</div>
+      <p>A trustworthy structural engineer must check everything EXCEPT:</p>
+      <p>✅ <strong>Answer: (d)</strong> — "An estimate of the likelihood and severity of earthquakes is NOT required as natural disasters are less frequent." This is <em>false</em> — engineers MUST estimate such natural risks.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q7 — Justified Whistle-Blowing</div>
+      <p>Whistle-blowing is justified when:</p>
+      <p>✅ <strong>Answer: (a)</strong> — Concerns have been reported to immediate superiors and no satisfactory response was received within a reasonable time. This is the primary trigger for justified whistle-blowing.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q8 — NSPE Code on IP</div>
+      <p>Which organisation's code of ethics on intellectual property gives standards for fairly crediting others beyond proprietary interests?</p>
+      <p>✅ <strong>Answer: (a) National Society of Professional Engineers (NSPE)</strong></p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q9 — Industrial Design Patent (Tea Cup)</div>
+      <p>A tea cup has a hollow receptacle (functional), a handle (functional), and unique ornamentation (aesthetic). Which part can be patented under industrial design patent?</p>
+      <p>✅ <strong>Answer: (a) Only the ornamentation on the body</strong> — Industrial design patents cover aesthetic/ornamental features, not functional ones.</p>
+    </div>
+
+    <div class="pq">
+      <div class="pq-title">Q10 — Identifying the Erroneous Statement (S1–S3)</div>
+      <ul>
+        <li>S1: Intuition is the ability to immediately recognise what is going on → Correct definition</li>
+        <li>S2: Intuition may result from training/experience; ability to recognise without articulating → Correct</li>
+        <li>S3: A reasoned judgment about moral justification considers consequences, rights, obligations, agreements, and promises → Correct and complete</li>
+      </ul>
+      <p>✅ <strong>Answer: (d) None of the above</strong> — All three statements are correct.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section" id="sec5">
+  <div class="section-header"><span class="num">5</span>Quick Revision Summary</div>
+  <div class="section-body">
+
+    <h3>🗂️ Key Terms Flash Reference</h3>
+    <p>
+      <span class="tag">Ethical Subjectivism</span>
+      <span class="tag">Moral Responsibility</span>
+      <span class="tag">Professional Responsibility</span>
+      <span class="tag">Official Responsibility</span>
+      <span class="tag">Whistle-Blowing</span>
+      <span class="tag">Patent</span>
+      <span class="tag">Copyright</span>
+      <span class="tag">Fair Use</span>
+      <span class="tag">Trade Secret</span>
+      <span class="tag">Utilitarianism</span>
+      <span class="tag">Virtue Ethics</span>
+      <span class="tag">Duty Ethics</span>
+      <span class="tag">Rights Ethics</span>
+      <span class="tag">NCEES</span>
+      <span class="tag">NSPE</span>
+      <span class="tag">Intuition vs. Judgment</span>
+      <span class="tag">Trustworthy Practice</span>
+      <span class="tag">Industrial Design Patent</span>
+    </p>
+
+    <hr class="divider">
+
+    <h3>⚡ Must-Remember Facts</h3>
+    <ul>
+      <li>Patent = Contract between inventor and <strong>society</strong></li>
+      <li>Industrial Design Patent = protects <strong>aesthetic/ornamental</strong> features only</li>
+      <li>Copyright protects the <strong>expression</strong>, not the idea itself</li>
+      <li>NCEES = <strong>National Council for Engineering Examiners and Surveyors</strong></li>
+      <li>NSPE code addresses both proprietary interests AND fair <strong>crediting of others</strong></li>
+      <li>Official responsibility ≠ Moral responsibility (NOT interchangeable)</li>
+      <li>Whistle-blowing is justified when <strong>prior internal reporting failed</strong> and harm is significant</li>
+      <li>For software engineers, responsibility = avoiding <strong>all bugs/glitches</strong>, not predicting which cause safety issues</li>
+      <li>Five societies that mandate holding public safety paramount: <strong>ASCE, ASME, AIChE, NSPE, NCEES</strong></li>
+      <li>Ethical subjectivism is tackled using: Utilitarianism, Duty Ethics, Rights Ethics, Virtue Ethics</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h3>📝 Exam Strategy Tips</h3>
+    <div class="tip-box">
+      <ul style="margin:0;">
+        <li>Watch for <strong>assertion-reason</strong> questions — verify both A and R independently, then check if R explains A.</li>
+        <li>For true/false combination questions, eliminate clearly wrong options by checking each statement carefully.</li>
+        <li>In responsibility-type questions, check if both moral AND professional apply — often the answer is "both."</li>
+        <li>For industrial design patent questions, remember: <strong>function cannot be patented</strong>, only appearance.</li>
+        <li>NCEES full form is a favourite factual question — memorise it exactly.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer style="text-align:center;padding:20px;color:#888;font-size:0.85rem;border-top:1px solid #ddd;background:#fff;">
+  NPTEL — Ethics in Engineering Practice | Week 7 | IIT Kharagpur | Dr. Susmita Mukhopadhayay<br>
+  <span style="font-size:0.8rem;">Notes compiled from lecture slides and assignment analysis</span>
+</footer>
+
+</body>
+</html>

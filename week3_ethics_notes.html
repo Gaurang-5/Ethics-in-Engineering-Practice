@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 Notes – Ethics in Engineering Practice</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --border: #e4e0d8;
+    --text: #1a1816;
+    --muted: #6b6560;
+    --accent: #2d5a8e;
+    --accent-light: #e8f0fa;
+    --green: #1a6b45;
+    --green-light: #e6f4ed;
+    --amber: #7a4f0a;
+    --amber-light: #fdf3e0;
+    --red: #8b2020;
+    --red-light: #fdf0f0;
+    --purple: #5a3a8e;
+    --purple-light: #f2eeff;
+    --teal: #0f5e54;
+    --teal-light: #e4f7f3;
+    --coral: #8e3a2d;
+    --coral-light: #fdf0ed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; }
+
+  .header { background: #1a4a7a; color: white; padding: 2.5rem 2rem; text-align: center; }
+  .header .course { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem; font-family: 'Helvetica Neue', sans-serif; }
+  .header h1 { font-size: 24px; font-weight: normal; margin-bottom: 0.4rem; }
+  .header .meta { font-size: 13px; opacity: 0.7; font-family: 'Helvetica Neue', sans-serif; }
+
+  .toc { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 2rem; }
+  .toc-title { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .toc-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; list-style: none; }
+  .toc-list a { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; color: var(--accent); text-decoration: none; }
+  .toc-list a:hover { text-decoration: underline; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: center; gap: 0.75rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.6rem; margin-bottom: 1.5rem; }
+  .section-num { background: var(--accent); color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-header h2 { font-size: 19px; font-weight: normal; color: var(--accent); }
+
+  h3 { font-size: 15px; font-weight: bold; margin: 1.5rem 0 0.6rem; font-family: 'Helvetica Neue', sans-serif; letter-spacing: 0.3px; }
+  p { margin-bottom: 0.9rem; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .card-title { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.6rem; }
+
+  .info-box { border-left: 3px solid var(--accent); background: var(--accent-light); padding: 0.9rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+  .info-box .label { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.3rem; }
+
+  .warn-box { border-left: 3px solid #c07a14; background: var(--amber-light); padding: 0.9rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+  .warn-box .label { color: var(--amber); font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+
+  .good-box { border-left: 3px solid #1a6b45; background: var(--green-light); padding: 0.9rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+  .good-box .label { color: var(--green); font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+
+  .def-box { border-left: 3px solid var(--purple); background: var(--purple-light); padding: 0.9rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+  .def-box .label { color: var(--purple); font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1rem 0; }
+
+  .type-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .type-card .type-label { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem; }
+  .type-card.blue .type-label { color: var(--accent); } .type-card.blue { border-top: 3px solid var(--accent); }
+  .type-card.green .type-label { color: var(--green); } .type-card.green { border-top: 3px solid var(--green); }
+  .type-card.amber .type-label { color: var(--amber); } .type-card.amber { border-top: 3px solid #c07a14; }
+  .type-card.purple .type-label { color: var(--purple); } .type-card.purple { border-top: 3px solid var(--purple); }
+  .type-card.teal .type-label { color: var(--teal); } .type-card.teal { border-top: 3px solid var(--teal); }
+  .type-card.red .type-label { color: var(--red); } .type-card.red { border-top: 3px solid var(--red); }
+  .type-card.coral .type-label { color: var(--coral); } .type-card.coral { border-top: 3px solid var(--coral); }
+
+  .steps-list { counter-reset: steps; list-style: none; }
+  .steps-list li { counter-increment: steps; display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+  .steps-list li::before { content: counter(steps); background: var(--accent); color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+  .alpha-list { list-style: none; }
+  .alpha-list li { padding: 0.5rem 0 0.5rem 2rem; position: relative; border-bottom: 1px dotted var(--border); }
+  .alpha-list li:last-child { border-bottom: none; }
+  .alpha-list li .ltr { position: absolute; left: 0; font-family: 'Helvetica Neue', sans-serif; font-weight: bold; color: var(--accent); font-size: 13px; }
+
+  .bullet-list { list-style: none; }
+  .bullet-list li { padding: 0.3rem 0 0.3rem 1.25rem; position: relative; }
+  .bullet-list li::before { content: '—'; position: absolute; left: 0; color: var(--muted); }
+
+  .case-study { background: var(--teal-light); border: 1px solid #9fd0c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
+  .case-study .cs-title { font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 0.6rem; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .pill { display: inline-block; font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .pill-blue { background: var(--accent-light); color: var(--accent); }
+  .pill-green { background: var(--green-light); color: var(--green); }
+  .pill-amber { background: var(--amber-light); color: var(--amber); }
+  .pill-purple { background: var(--purple-light); color: var(--purple); }
+  .pill-teal { background: var(--teal-light); color: var(--teal); }
+
+  .ipr-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 4px 12px; font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; margin: 3px; }
+  .ipr-badge.pat { border-color: var(--accent); color: var(--accent); }
+  .ipr-badge.tm { border-color: var(--green); color: var(--green); }
+  .ipr-badge.cr { border-color: var(--purple); color: var(--purple); }
+  .ipr-badge.id { border-color: var(--amber); color: var(--amber); }
+  .ipr-badge.gi { border-color: var(--teal); color: var(--teal); }
+
+  .exam-section { background: #fffdf5; border: 1px solid #e8d9a0; border-radius: 10px; padding: 1.5rem; margin-top: 2rem; }
+  .exam-section h3 { color: var(--amber); margin-top: 0; }
+  .q-item { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px dashed #e0d090; }
+  .q-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .q-text { font-weight: bold; margin-bottom: 0.4rem; }
+  .q-ans { background: var(--green-light); border-radius: 4px; padding: 0.3rem 0.6rem; font-family: 'Helvetica Neue', sans-serif; font-size: 13px; color: var(--green); display: inline-block; margin-bottom: 0.3rem; }
+  .q-wrong { background: var(--red-light); border-radius: 4px; padding: 0.3rem 0.6rem; font-family: 'Helvetica Neue', sans-serif; font-size: 13px; color: var(--red); display: inline-block; margin-bottom: 0.3rem; margin-left: 6px; }
+  .q-exp { font-size: 13.5px; color: var(--muted); }
+
+  .compare-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+  .compare-table th { background: var(--accent); color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; text-align: left; }
+  .compare-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #f8f7f4; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .container { padding: 1rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="course">NPTEL · Ethics in Engineering Practice · IIT Kharagpur</div>
+  <h1>Week 3 — Ethical Theories, Problem Solving &amp; Intellectual Property Rights</h1>
+  <div class="meta">Lectures 11–15 &nbsp;·&nbsp; Dr. Susmita Mukhopadhayay, Vinod Gupta School of Management</div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <ul class="toc-list">
+    <li><a href="#theories">1. Ethical Theories</a></li>
+    <li><a href="#analysis">2. Analysing Ethical Issues</a></li>
+    <li><a href="#techniques">3. Solving Techniques</a></li>
+    <li><a href="#code">4. Code of Ethics</a></li>
+    <li><a href="#ipr">5. Intellectual Property Rights</a></li>
+    <li><a href="#patent">6. Patents</a></li>
+    <li><a href="#trademark">7. Trademarks</a></li>
+    <li><a href="#design">8. Industrial Design &amp; GI</a></li>
+    <li><a href="#copyright">9. Copyright &amp; WIPO</a></li>
+    <li><a href="#trips">10. TRIPS &amp; India</a></li>
+    <li><a href="#exam">11. Exam Q&amp;A</a></li>
+  </ul>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: ETHICAL THEORIES -->
+  <div class="section" id="theories">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Ethical Theories — Solving Moral Problems</h2>
+    </div>
+
+    <p>Engineering ethics uses multiple moral theories simultaneously — not to pick one, but to view a problem from different angles. If multiple theories reach the same conclusion, that greatly strengthens the ethical verdict.</p>
+
+    <div class="grid-2">
+      <div class="type-card blue">
+        <div class="type-label">Utilitarianism</div>
+        Actions are good if they maximise overall societal well-being. Collectivist — the greatest good for the greatest number. Uses cost–benefit analysis. Proponent: John Stuart Mill. Two forms: <em>Act utilitarianism</em> (judge each action) and <em>Rule utilitarianism</em> (follow moral rules that generally maximise good).
+      </div>
+      <div class="type-card amber">
+        <div class="type-label">Duty Ethics (Deontology)</div>
+        Moral duties are fundamental. Actions are ethical if they could be written down as universal duties (be honest, don't cause suffering, be fair). Proponent: Immanuel Kant (1724–1804). Ethical acts express respect for persons as autonomous moral agents.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Rights Ethics</div>
+        People have fundamental rights that others have a duty to respect. Proponent: John Locke (1632–1704) — right to life, liberty, and property. Criticism: basic rights of one person may conflict with rights of another; may not account for overall societal good.
+      </div>
+      <div class="type-card green">
+        <div class="type-label">Virtue Ethics</div>
+        Focuses on the character of the moral agent. Virtues include honesty, responsibility, competence, loyalty, trustworthiness, fairness, and caring. Vices include dishonesty, disloyalty, irresponsibility. Asks: "What would a person of good character do?"
+      </div>
+    </div>
+
+    <h3>Which theory to use?</h3>
+    <div class="good-box">
+      <div class="label">Key Insight</div>
+      You do not have to choose one theory. Use all of them to analyse a problem from different angles. <strong>Frequently the conclusion is the same</strong> regardless of which theory you apply — this convergence provides strong ethical confidence.
+    </div>
+
+    <div class="case-study">
+      <div class="cs-title">Example — Chemical Plant Pollution</div>
+      A chemical plant discharges hazardous waste into groundwater near a city's water supply. All four theories converge: <em>Rights ethics</em> — the pollution violates residents' rights. <em>Utilitarian analysis</em> — economic benefits of the plant are almost certainly outweighed by pollution costs and health effects. <em>Virtue ethics</em> — discharging waste is irresponsible and harmful. All three point to the same conclusion: the action is unethical.
+    </div>
+
+    <h3>Cost–Benefit Analysis (Utilitarian Tool)</h3>
+    <p>Only projects with the <strong>highest ratio of benefits to costs</strong> are implemented. This mirrors the utilitarian goal of maximising overall good.</p>
+    <div class="warn-box">
+      <div class="label">Pitfalls of Cost–Benefit Analysis</div>
+      CBA has serious limitations: it may not capture the loss of scenic wilderness, endangered species (no current economic value), or intangible harms. Critically, it is <strong>unfair to place all costs on one group while another reaps the benefits</strong>. CBA should be supplemented with other ethical frameworks, not used in isolation. Note: Only the statement that CBA is similar to the utilitarian goal (S1) is correct; the statement that "projects with equal benefits-to-cost ratios will be implemented" (S3) is false — it is the highest ratio.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2: ANALYSING ETHICAL ISSUES -->
+  <div class="section" id="analysis">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Analysing Ethical Issues — Three Types</h2>
+    </div>
+
+    <p>The first step in solving any ethical problem is to completely understand all the issues involved. Issues fall into three categories:</p>
+
+    <div class="grid-3">
+      <div class="type-card blue">
+        <div class="type-label">Factual Issues</div>
+        What are the actual facts of the case? Facts are not always clear or uncontested. Example: the facts about whether global warming is occurring and how severe it will be are debated, affecting what engineers must design to.
+      </div>
+      <div class="type-card amber">
+        <div class="type-label">Conceptual Issues</div>
+        What does a key concept mean or apply to in this situation? Example: Does this payment constitute a bribe or an acceptable gift? Is this business information truly proprietary? These can be genuinely controversial.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Moral Issues</div>
+        Once factual and conceptual issues are resolved, which moral principle applies? Once the problem is clearly defined, the correct moral principle usually becomes obvious. Example: once you determine the payment <em>is</em> a bribe, the ethical answer (refuse it) is clear.
+      </div>
+    </div>
+
+    <div class="case-study">
+      <div class="cs-title">Case Study — Paradyne Computers (1980)</div>
+      Paradyne bid to supply the SSA with computers. <em>Factual:</em> the RFP required existing systems only; Paradyne's product was untested. <em>Conceptual:</em> Is bidding on a planned (not existing) product acceptable business practice, or lying? Is placing your label over another manufacturer's label deceptive? Does lobbying a former employer constitute conflict of interest? <em>Moral:</em> Once determined that the practices were deceptive, the conclusion follows: lying and deceit are no more acceptable in business than in personal life.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3: TECHNIQUES -->
+  <div class="section" id="techniques">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Techniques for Solving Ethical Issues</h2>
+    </div>
+
+    <h3>1. Line Drawing</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Line drawing is especially useful when the applicable moral principles are clear, but there is a <strong>great deal of "grey area" about which ethical principle applies</strong> to the specific situation. It is NOT for sequential decisions (that is flow charting).
+    </div>
+    <p>A line is drawn with two extreme poles:</p>
+    <div class="grid-2">
+      <div class="type-card green">
+        <div class="type-label">Positive Paradigm (Left end)</div>
+        An example of something unambiguously morally acceptable. E.g., "Products should perform as advertised."
+      </div>
+      <div class="type-card red">
+        <div class="type-label">Negative Paradigm (Right end)</div>
+        An example of something unambiguously not morally acceptable. E.g., "Knowingly sell defective products that will harm customers."
+      </div>
+    </div>
+    <p>Various hypothetical situations are then placed along the line to determine where the actual situation falls.</p>
+
+    <div class="case-study">
+      <div class="cs-title">Case Study — Intel Pentium Chip (1994–95)</div>
+      A flaw was found in the Pentium chip. Intel initially tried to conceal it. Using line drawing: positive paradigm = "products perform as advertised"; negative paradigm = "knowingly sell defective products." Intel's actual approach ("flaw exists, customers not informed, magnitude minimised") fell closer to the negative paradigm — not the best ethical choice.
+    </div>
+
+    <h3>2. Flow Charting</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Flow charting is helpful when there is a <strong>sequence of events or a series of consequences that flows from each decision</strong>. It gives a visual picture of a situation and lets you see the consequences of each decision point.
+    </div>
+    <div class="warn-box">
+      <div class="label">Exam Trap — Line Drawing vs. Flow Charting</div>
+      <strong>Line drawing</strong> is for grey-area situations where the moral principle is debated. <strong>Flow charting</strong> is for sequential events/consequences. The exam often tests whether you can distinguish these two techniques. (Assertion about "flowchart for grey-area" is FALSE — that is line drawing.)
+    </div>
+
+    <div class="case-study">
+      <div class="cs-title">Case Study — Bhopal (Union Carbide)</div>
+      Flow chart analysis was applied to the Bhopal disaster, where MIC (toxic substance) mixed with water created toxic fumes. Two flow charts were used: one examining decisions about locating the plant in India, and another examining decisions about deactivating the flare tower for maintenance. Each decision node shows the cascade of consequences that follow.
+    </div>
+
+    <h3>3. Conflict Problems and the Creative Middle Way</h3>
+    <p>When two conflicting moral values both seem correct, three solutions exist:</p>
+    <ul class="steps-list">
+      <li><strong>Priority:</strong> One moral value is clearly more significant. Protecting public health and safety outweighs loyalty to an employer — this is an easy choice.</li>
+      <li><strong>Creative Middle Way:</strong> A creative compromise that works for everyone. Requires creativity to find common ground and diplomacy to sell it to all parties.</li>
+      <li><strong>Satisficing:</strong> When no ideal solution exists, seek a satisfactory one (Herbert Simon's term "satisficing").</li>
+    </ul>
+
+    <h3>Steps for Solving Ethical Dilemmas</h3>
+    <ol class="alpha-list">
+      <li><span class="ltr">a)</span><strong>Moral clarity:</strong> Identify all relevant moral values in the situation.</li>
+      <li><span class="ltr">b)</span><strong>Conceptual clarity:</strong> Be clear about key concepts — what you are asked to do may not be good for the organisation in the long run.</li>
+      <li><span class="ltr">c)</span><strong>Informed about the facts:</strong> Gather all relevant factual information pertinent to the applicable moral values.</li>
+      <li><span class="ltr">d)</span><strong>Informed about options:</strong> Consider all realistic options — dilemmas often seem like forced two-way choices, but closer examination reveals additional paths.</li>
+      <li><span class="ltr">e)</span><strong>Well-reasoned decision:</strong> Arrive at a carefully reasoned judgment by weighing all relevant moral reasons and facts. This is deliberation, not a mechanical algorithm.</li>
+    </ol>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4: CODE OF ETHICS -->
+  <div class="section" id="code">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Code of Ethics</h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Codes of ethics state the moral responsibilities of engineers as seen by the profession and as represented by a professional society. They express the profession's collective commitment to ethics.
+    </div>
+
+    <h3>Eight essential roles of Codes of Ethics</h3>
+    <div class="grid-2">
+      <ul class="bullet-list">
+        <li>Serving and protecting the public</li>
+        <li>Providing guidance on ethical behaviour</li>
+        <li>Offering inspiration to practitioners</li>
+        <li>Establishing shared professional standards</li>
+      </ul>
+      <ul class="bullet-list">
+        <li>Supporting responsible professionals</li>
+        <li>Contributing to ethics education</li>
+        <li>Deterring wrongdoing</li>
+        <li>Strengthening the profession's public image</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5: IPR OVERVIEW -->
+  <div class="section" id="ipr">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Intellectual Property Rights — Overview</h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Intellectual property (IP) is a category of property that includes <strong>intangible creations of human intelligence</strong>. It mainly covers copyrights, patents, and trademarks, along with trade secrets, publicity rights, moral rights, and rights against unfair competition.
+    </div>
+
+    <div class="warn-box">
+      <div class="label">Tangible vs Intangible Property</div>
+      <strong>Tangible property</strong> can be physically touched — land, houses, cars. <strong>Intangible property</strong> cannot be seen or touched, can be easily misappropriated by copying, and the cost of reproduction is negligible. This is precisely why IP needs legal protection.
+    </div>
+
+    <h3>Two Categories of IPR</h3>
+    <div class="grid-2">
+      <div class="type-card blue">
+        <div class="type-label">Industrial Property</div>
+        Includes patents for inventions, trademarks, geographical indications, and industrial designs.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Copyright</div>
+        Covers literary works (novels, poems, plays), films, music, artistic works (drawings, paintings, photographs, sculptures), and architectural designs.
+      </div>
+    </div>
+
+    <h3>IP Chain of Activities</h3>
+    <div class="grid-3">
+      <div class="type-card blue"><div class="type-label">Creation</div>Coming up with a new product or idea.</div>
+      <div class="type-card green"><div class="type-label">Innovation</div>Something "not seen before" — a new application or approach.</div>
+      <div class="type-card amber"><div class="type-label">Commercialisation</div>Execution and making available for sale.</div>
+    </div>
+    <div class="grid-2" style="margin-top: 0;">
+      <div class="type-card purple"><div class="type-label">Protection</div>Registering under law — patent, trademark, copyright, etc.</div>
+      <div class="type-card teal"><div class="type-label">Enforcement</div>Cannot be copied or stolen as per law; enforced in courts.</div>
+    </div>
+
+    <h3>Why does intangible property need protection?</h3>
+    <ul class="bullet-list">
+      <li>High expenditure involved in creating new products or designs.</li>
+      <li>Significant research and development investment must be recouped.</li>
+      <li>Avoiding <strong>free riding</strong> — others using your property for free without compensation.</li>
+      <li>Maintaining loyal followers and inhibiting "me too" creations in grey markets.</li>
+      <li>Retaining profits from the creator's investment.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6: PATENTS -->
+  <div class="section" id="patent">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Patents <span class="ipr-badge pat">Patent</span></h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      A patent is an <strong>exclusive right granted for an invention</strong> — a product or process that provides a new way of doing something, or that offers a new technical solution to a problem. Protection is generally granted for <strong>20 years</strong>.
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Why are patents necessary?</div>
+        Patents offer incentives and rewards to individuals by recognising creativity, encouraging them to develop new marketable inventions for the benefit of the public.
+      </div>
+      <div class="card">
+        <div class="card-title">Public domain requirement</div>
+        <strong>All patent owners are required to share their information in the public domain.</strong> This information can inspire further creativity and innovation by others.
+      </div>
+    </div>
+
+    <h3>Rights of Patent Owners</h3>
+    <ul class="bullet-list">
+      <li>Decide who can or cannot use the patented invention.</li>
+      <li>Give permission or offer a licence to other parties on mutually agreed terms.</li>
+      <li>Sell their patent rights to another person.</li>
+      <li>Once the patent expires, it enters the <strong>public domain</strong> (also called "off-patent") — the owner ceases to have exclusive rights.</li>
+    </ul>
+
+    <div class="info-box">
+      <div class="label">Court enforcement</div>
+      Patents ARE usually enforced in courts. Courts CAN also cancel patents if a third party's claims are found valid at a later stage.
+    </div>
+
+    <h3>What can be patented?</h3>
+    <div class="good-box">
+      <div class="label">Requirements for patentability</div>
+      Must be of <strong>practical use</strong> · Must carry <strong>novelty</strong> (new characteristics not part of existing knowledge) · Must be an invention (not a discovery).
+    </div>
+    <div class="warn-box">
+      <div class="label">What cannot generally be patented</div>
+      Scientific theories, mathematical methods, plant or animal varieties, discoveries of natural substances, commercial methods, and methods of medical treatment (as opposed to medical products) are generally NOT patentable.
+    </div>
+
+    <h3>Key True/False Facts about Patents (Exam Critical)</h3>
+    <table class="compare-table">
+      <tr><th>Statement</th><th>T/F</th><th>Explanation</th></tr>
+      <tr><td>All patent owners must share their information in the public domain.</td><td style="color:var(--green);font-weight:bold;">TRUE</td><td>Mandatory disclosure is a core feature of the patent system.</td></tr>
+      <tr><td>Patent owners can give permission or offer a licence on their own terms.</td><td style="color:var(--red);font-weight:bold;">FALSE</td><td>Licences are on <em>mutually agreed</em> terms, not solely the owner's unilateral terms.</td></tr>
+      <tr><td>Patents are not usually enforced in courts, and courts cannot cancel patents.</td><td style="color:var(--red);font-weight:bold;">FALSE</td><td>Patents ARE enforced in courts, and courts CAN cancel patents.</td></tr>
+      <tr><td>A patent is an exclusive right granted for an invention — a process providing a new way of doing something.</td><td style="color:var(--green);font-weight:bold;">TRUE</td><td>This is the standard definition of a patent.</td></tr>
+      <tr><td>Patents provide protection but do not encourage or recognise creativity.</td><td style="color:var(--red);font-weight:bold;">FALSE</td><td>Patents explicitly recognise and reward creativity — it is a core purpose.</td></tr>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 7: TRADEMARK -->
+  <div class="section" id="trademark">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Trademarks <span class="ipr-badge tm">Trademark</span></h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      A trademark is a <strong>distinctive sign that identifies certain goods or services</strong> produced or provided by an individual or company. It originated in ancient times when craftsmen marked their work to identify authorship.
+    </div>
+
+    <h3>Purpose of Trademarks</h3>
+    <ul class="bullet-list">
+      <li>Help consumers identify and purchase products/services based on quality and characteristics.</li>
+      <li>Give owners the right to use the mark and to license it to others for payment.</li>
+      <li>Promote enterprises globally through recognition and financial profit.</li>
+      <li>Protect against counterfeit products (fake goods using similar signs).</li>
+    </ul>
+
+    <h3>What can be registered as a Trademark?</h3>
+    <div class="grid-2">
+      <ul class="bullet-list">
+        <li>Combination of words, letters, and numerals.</li>
+        <li>Drawings, symbols, or three-dimensional signs (shape and packaging of goods).</li>
+      </ul>
+      <ul class="bullet-list">
+        <li><strong>Holograms, motions, colour, and non-visible signs</strong> such as sound, smell, or taste.</li>
+        <li>ISO certifications.</li>
+        <li>Collective marks owned by associations (e.g. accountants, engineers, architects).</li>
+      </ul>
+    </div>
+
+    <h3>In India — Trade Marks Act, 1999</h3>
+    <ul class="bullet-list">
+      <li>Definition enlarged to include shape of goods, packaging, and combination of colours.</li>
+      <li>Service marks (for services, not just goods) are registerable.</li>
+      <li>Single registration — no separate application per class; one application suffices but fee is charged per class.</li>
+      <li>Term of registration: <strong>10 years</strong>, renewable thereafter.</li>
+      <li>Enhanced punishment aligned with Copyright Act to prevent spurious goods.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 8: INDUSTRIAL DESIGN & GI -->
+  <div class="section" id="design">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Industrial Design &amp; Geographical Indications <span class="ipr-badge id">Design</span> <span class="ipr-badge gi">GI</span></h2>
+    </div>
+
+    <h3>Industrial Design</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Industrial design refers to the <strong>ornamental or aesthetic aspects of an article</strong>. It may consist of shape, pattern, size, colour, or two-dimensional features. Applied to a wide variety of products — medical equipment, watches, jewellery, electrical items, housewares, textiles, and more.
+    </div>
+
+    <div class="info-box">
+      <div class="label">Requirements for protection (Critical for Exam)</div>
+      An industrial design must be: (1) <strong>New</strong> — different from designs already protected. (2) <strong>Non-functional</strong> — technical features cannot be protected under industrial design; they can only be covered under patents. <em>Only the aesthetic/ornamental aspect is protected as a design.</em>
+    </div>
+
+    <p>Protection term: generally <strong>5 years</strong>, renewable for up to a total of <strong>15 years</strong> in most cases. In India (Designs Act, 2000): initial term of <strong>10 years</strong>, followed by another 5 years on request.</p>
+
+    <h3>Geographical Indications (GI)</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      A GI is a sign used on goods that denotes the origin, quality, and reputation of the goods as belonging to a <strong>particular geographical location</strong>. Most commonly used for agricultural products.
+    </div>
+
+    <div class="grid-2">
+      <div class="type-card teal">
+        <div class="type-label">Examples</div>
+        Darjeeling Tea, Himachal Pradesh apples, Manipur Tamenglong mandarin oranges, Swiss chocolates. These command a premium price because of their geographical origin.
+      </div>
+      <div class="type-card amber">
+        <div class="type-label">Why protection is needed</div>
+        Consumers treat GIs as synonymous with quality and trust. False use (e.g. selling non-Darjeeling tea as Darjeeling) misleads consumers and allows price fraud.
+      </div>
+    </div>
+
+    <h3>GI vs. Trademark</h3>
+    <table class="compare-table">
+      <tr><th>Trademark</th><th>Geographical Indication</th></tr>
+      <tr><td>Distinguishes goods/services of one <em>company</em> from another.</td><td>Guarantees that the product originates from a specific <em>place</em>.</td></tr>
+      <tr><td>Can be owned by any individual or company.</td><td>Based on collective community or regional ownership.</td></tr>
+    </table>
+
+    <div class="warn-box">
+      <div class="label">Generic Geographical Indication</div>
+      When the name of a place is used to designate a <em>type</em> of product rather than indicate its actual origin, it becomes a generic term and no longer functions as a GI. Example: "cheddar" was once a GI for cheese from Cheddar, Somerset, but is now used generically.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 9: COPYRIGHT & WIPO -->
+  <div class="section" id="copyright">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>Copyright &amp; WIPO <span class="ipr-badge cr">Copyright</span></h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      Copyright law grants authors protection for their <strong>literary and artistic work</strong>. Related rights protect performers (actors, musicians), sound recordists, and broadcasting organisations.
+    </div>
+
+    <h3>Works covered by copyright</h3>
+    <p>Novels, poems, plays, reference works, newspapers, advertisements, computer programs, databases, films, musical compositions, choreography, paintings, drawings, photographs, sculpture, architecture, maps, and technical drawings.</p>
+
+    <h3>Rights of copyright holders</h3>
+    <p>Can authorise or stop others from: reproducing the work; using it elsewhere without permission; creating and selling copies; translating into other languages; performing or communicating it without permission.</p>
+
+    <div class="info-box">
+      <div class="label">Copyright protects expression, not ideas</div>
+      Copyright protects the <em>expression</em> of ideas, not the ideas themselves. There is no copyright for ideas, procedures, methods of operation, or mathematical concepts.
+    </div>
+
+    <h3>Duration in India</h3>
+    <p>Authors: life of the author <strong>plus 60 years</strong> after death. Cinematograph films and sound recordings: <strong>60 years</strong> from the year of production. Rights pass to legal heirs after death of the owner.</p>
+
+    <h3>WIPO — World Intellectual Property Organization</h3>
+    <div class="card">
+      <div class="card-title">Key facts about WIPO</div>
+      <ul class="bullet-list">
+        <li>Established in <strong>1970</strong>.</li>
+        <li>An international organisation devoted to <strong>protecting the rights of creators and owners of intellectual property worldwide</strong>.</li>
+        <li>Serves as a forum for Member States to establish and harmonise IPR rules and practices.</li>
+        <li>Administers global registration systems for trademarks, industrial designs, appellations of origin, and a global filing system for patents.</li>
+        <li>Provides outreach and information tools to ensure IP benefits are accessible to all.</li>
+      </ul>
+    </div>
+
+    <div class="warn-box">
+      <div class="label">Common Exam Error</div>
+      WIPO stands for World Intellectual <strong>Property</strong> Organization — NOT "Proprietary." Any statement calling it "World Intellectual Proprietary Organization" is <strong>FALSE</strong>.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 10: TRIPS -->
+  <div class="section" id="trips">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>TRIPS Agreement &amp; India's Obligations</h2>
+    </div>
+
+    <div class="def-box">
+      <div class="label">Definition</div>
+      TRIPS = <strong>Trade-Related Aspects of Intellectual Property Rights</strong>. It is one of the main agreements of the WTO, negotiated during the Uruguay Round (1986–1994) under GATT. It appears as Annex 1C of the Marrakesh Agreement. Uniquely, it applies to <strong>all WTO members mandatorily</strong>.
+    </div>
+
+    <h3>Objective of TRIPS</h3>
+    <p>To reduce distortions and impediments to international trade while promoting effective protection of IPR, and ensuring IPR enforcement measures do not themselves become barriers to legitimate trade.</p>
+
+    <h3>IPRs covered under TRIPS</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem 0;">
+      <span class="ipr-badge cr">Copyright &amp; Related Rights</span>
+      <span class="ipr-badge tm">Trademarks (incl. service marks)</span>
+      <span class="ipr-badge gi">Geographical Indications</span>
+      <span class="ipr-badge id">Industrial Designs</span>
+      <span class="ipr-badge pat">Patents (incl. new plant varieties)</span>
+      <span class="pill pill-blue">Layout-designs of integrated circuits</span>
+      <span class="pill pill-purple">Undisclosed information / trade secrets</span>
+    </div>
+
+    <h3>Link between TRIPS and WTO</h3>
+    <p>WTO through TRIPS makes it mandatory for all member countries to follow basic minimum standards of IPR protection, bringing about a degree of harmonisation of domestic IP laws globally.</p>
+
+    <h3>Doha Declaration — Public Health Exception</h3>
+    <p>Rigid TRIPS IP rights allow pharmaceutical companies to charge prices above marginal cost, restricting governments' ability to ensure affordable access to medicines. The Doha Declaration (2001) clarified that:</p>
+    <ul class="bullet-list">
+      <li>TRIPS does not prevent member countries from taking steps to protect public health.</li>
+      <li>Members may grant <strong>compulsory licences</strong> for manufacture of essential medicines even without the IPR holder's consent.</li>
+      <li>A 2003 WTO decision also allowed limited export/import of medicines to countries lacking manufacturing capacity.</li>
+    </ul>
+
+    <h3>India's Obligations under TRIPS</h3>
+    <table class="compare-table">
+      <tr><th>Amendment</th><th>Key Change</th></tr>
+      <tr><td>Patents (Amendment) Act, 1999 (retrospective from 1 Jan 1995)</td><td><strong>First amendment:</strong> Allowed filing of patents in drugs, pharmaceuticals, and agro-chemicals — previously not allowed.</td></tr>
+      <tr><td>Patents (Amendment) Act, 2002 (in force 20 May 2003)</td><td><strong>Second amendment:</strong> New patent rules; met obligations required by year 2000 under TRIPS; aligned with WIPO's Patent Cooperation Treaty.</td></tr>
+      <tr><td>Patents (Amendment) Act, 2005 (from 1 Jan 2005)</td><td><strong>Third amendment:</strong> Provided patents for drugs, medicines, food and chemical products. Brought India into <em>full compliance</em> with TRIPS.</td></tr>
+      <tr><td>Trade Marks Act, 1999 (in force Sept 15, 2003)</td><td>Replaced the 1958 Act; brought India into TRIPS compliance for trademarks.</td></tr>
+      <tr><td>Copyright Act, 1957 (as amended)</td><td>Compliant with Berne Convention, Universal Copyright Convention, and TRIPS. India is NOT a member of the Rome Convention (1961) or WIPO Internet Treaties (WCT/WPPT).</td></tr>
+    </table>
+
+    <h3>Special provision in Indian Patent Law (Section 3d)</h3>
+    <div class="info-box">
+      <div class="label">Unique to India</div>
+      Section 3 of the Patent Act lists exceptions — things that cannot be patented. The unique clause 3(d) <strong>prevents patenting of minor improvements in chemical and pharmaceutical entities</strong> unless the invention results in the enhancement of known efficacy. This is a public health safeguard setting a higher threshold (therapeutic efficacy) for pharmaceutical patents.
+    </div>
+
+    <h3>Industrial Design in India — Designs Act, 2000</h3>
+    <ul class="bullet-list">
+      <li>Initial term of protection: <strong>10 years</strong>, followed by a further 5 years on request.</li>
+      <li>Introduced Locarno classification system for designs.</li>
+      <li>Eliminated secrecy period of two years; allowed public inspection after notification.</li>
+      <li>Identification of non-registerable designs.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 11: EXAM Q&A -->
+  <div class="section" id="exam">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Exam-Ready Q&amp;A (Assignment 3)</h2>
+    </div>
+
+    <div class="exam-section">
+      <h3>All 10 Questions with Correct Answers &amp; Explanations</h3>
+
+      <div class="q-item">
+        <div class="q-text">Q1. The American government, knowing the detrimental effect on the Arctic climate and native animals, still gives permission to Royal Dutch Shell to expand offshore drilling. This decision illustrates:</div>
+        <div class="q-ans">Correct Answer: (c) Poor right ethics</div>
+        <div class="q-wrong">Common mistake: (d) Poor cost-benefit analysis</div>
+        <div class="q-exp">The government is violating the rights of Arctic animals and native populations who depend on a healthy environment. This is a failure of rights ethics — it does not respect the rights of affected parties. While there is also a cost-benefit dimension, the most precise answer is poor right ethics, since the question emphasises harm to living beings' rights to exist safely.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q2. Identify correct statements about Cost–Benefit Analysis: S1: similar to utilitarian goal of maximising overall good. S2: It is fair to place all costs on one group while another reaps benefits. S3: Projects with equal benefit-to-cost ratios will be implemented.</div>
+        <div class="q-ans">Correct Answer: (d) Only S1 is correct</div>
+        <div class="q-exp">S1 is True — CBA is indeed similar to the utilitarian goal. S2 is False — it is explicitly stated as unfair to place all costs on one group. S3 is False — only projects with the <em>highest</em> ratio of benefits to costs are implemented, not equal ratios.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q3. Riya created an original line drawing of a saree pattern. A boutique copied it, slightly changed the colours, and used it commercially without permission. Which IP protection is most relevant?</div>
+        <div class="q-ans">Correct Answer: (c) Copyright</div>
+        <div class="q-exp">An original artistic work (drawing/illustration) is protected by copyright from the moment of creation. No registration is needed. The boutique violated copyright by reproducing the artistic work without permission.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q4. Arjun has: (1) self-cooling technology for a water bottle, (2) brand name "ChillSip" and its logo, (3) technical drawings of the mechanism. Which combination of IP rights correctly protects these?</div>
+        <div class="q-ans">Correct Answer: (b) Patent for technology, Trademark for brand name &amp; logo, Copyright for drawings</div>
+        <div class="q-exp">The self-cooling technology is a novel invention — protected by a Patent. The brand name and logo are commercial identifiers — protected by a Trademark. The technical drawings are artistic/creative works — protected by Copyright. Each IP type maps to its correct subject matter.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q5. Identify True/False for patent statements: S1: All patent owners must share information in public domain. S2: Owners can give licence on their own terms. S3: Patents not usually enforced in courts; courts cannot cancel patents. S4: Patent is exclusive right for an invention providing a new way of doing something. S5: Patents provide protection but do not encourage creativity.</div>
+        <div class="q-ans">Correct Answer: (d) S1(T), S2(F), S3(F), S4(T), S5(F)</div>
+        <div class="q-exp">S1 TRUE — all owners must disclose to public domain. S2 FALSE — licences are on <em>mutually agreed</em> terms. S3 FALSE — patents ARE enforced in courts and courts CAN cancel patents. S4 TRUE — standard definition. S5 FALSE — a primary purpose of patents is to recognise and encourage creativity.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q6. To be protected, an industrial design must be new and ______; as ______ cannot be protected under industrial design.</div>
+        <div class="q-ans">Correct Answer: (b) Non-functional; Technical features</div>
+        <div class="q-exp">Industrial designs protect only the ornamental/aesthetic aspects. Technical/functional features must be protected under patents, not industrial design. The design must be new AND non-functional to qualify for design protection.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q7. Assertion (A): A flow chart is especially useful for situations where moral principles are clear but there is a grey area about which ethical principle applies. Reason (R): In engineering ethics, flow charting is helpful for cases with a sequence of events or series of consequences flowing from each decision.</div>
+        <div class="q-ans">Correct Answer: (d) A is false but R is true</div>
+        <div class="q-exp">The Assertion describes LINE DRAWING (grey area about which principle applies), NOT flow charting. The Reason is correct — flow charting is indeed for sequential events and cascading consequences. This is a critical distinction the exam tests repeatedly.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q8. [Answer: d]</div>
+        <div class="q-ans">Correct Answer: (d)</div>
+        <div class="q-exp">Full question text was not visible in the uploaded PDF. Based on context of the week's topics, ensure you know the Indian Patent Act amendments: 1st amendment (1999, retrospective from 1995) — allowed filing for drugs/pharma/agro-chemicals; 2nd amendment (2002); 3rd amendment (2005) — full TRIPS compliance.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q9. Manipur's Tamenglong mandarin orange is costlier than other apples in the Indian market due to ______.</div>
+        <div class="q-ans">Correct Answer: (b) Geographical Indication</div>
+        <div class="q-exp">The Tamenglong mandarin orange carries a premium price because of its specific geographical origin in Manipur — this is exactly what a Geographical Indication (GI) represents. GIs allow products from specific regions to command higher prices based on their origin and associated quality/reputation.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q10. T/F: S1: WIPO stands for World Intellectual Proprietary Organization (purpose = protect IP owners' rights). S2: Holograms, motions, colour, and non-visible signs like sound/smell/taste can be trademarks. S3: Industrial designs refer to the ornamental or aesthetic aspects of luxury goods. S4: Creation can be defined as never seen before. S5: Intangible property needs protection to avoid free riding.</div>
+        <div class="q-ans">Correct Answer: (c) S1(F), S2(T), S3(T), S4(F), S5(T)</div>
+        <div class="q-wrong">Common mistake: (b) selected incorrectly</div>
+        <div class="q-exp">S1 FALSE — WIPO = World Intellectual <em>Property</em> Organization (not "Proprietary"). S2 TRUE — holograms, sounds, smells, tastes can all be trademarks. S3 TRUE as per lecture context (industrial designs include luxury goods among their applications). S4 FALSE — "Creation" = coming up with a new product; "Innovation" = never seen before. S5 TRUE — avoiding free riding is a key reason to protect intangible property.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK SUMMARY -->
+  <div class="card" style="margin-top: 2rem; border-left: 4px solid #1a4a7a;">
+    <div class="card-title" style="color: #1a4a7a; font-size: 14px; margin-bottom: 0.75rem;">Week 3 — Key Takeaways at a Glance</div>
+    <ul class="bullet-list">
+      <li><span class="pill pill-blue">Theories</span> Use all four (Utilitarian, Duty, Rights, Virtue) — they often converge on the same answer.</li>
+      <li><span class="pill pill-amber">Line Drawing</span> For grey-area decisions about which principle applies — NOT for sequential decisions.</li>
+      <li><span class="pill pill-teal">Flow Charting</span> For sequential events and cascading consequences — NOT for grey-area principle selection.</li>
+      <li><span class="pill pill-blue">Patent</span> 20 years protection. Must be novel and practical. Public disclosure required. Courts enforce and can cancel.</li>
+      <li><span class="pill pill-green">Trademark</span> Protects brand identity — words, logos, sounds, smells. 10 years in India, renewable.</li>
+      <li><span class="pill pill-amber">Industrial Design</span> Aesthetic/ornamental aspects only. Must be new AND non-functional. 5–15 years protection.</li>
+      <li><span class="pill pill-teal">GI</span> Origin-based quality mark. Tamenglong oranges, Darjeeling tea are GI products.</li>
+      <li><span class="pill pill-purple">Copyright</span> Protects expression (not ideas). Author's life + 60 years in India. No registration needed.</li>
+      <li><span class="pill pill-blue">TRIPS</span> Mandatory WTO agreement; Uruguay Round 1986–94. India fully compliant after 3rd Patent Amendment (2005).</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

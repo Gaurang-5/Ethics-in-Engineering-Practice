@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethics in Engineering Practice — Week 1 Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #faf7f2;
+    --accent: #8b1a1a;
+    --gold: #c8962a;
+    --teal: #1a6b6b;
+    --muted: #6b6055;
+    --light-rule: #e4ddd3;
+    --highlight: #fff3cd;
+    --tag-bg: #f0e8d8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(200,150,42,0.04) 40px, rgba(200,150,42,0.04) 80px
+    );
+  }
+  .course-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  header h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .subtitle {
+    font-size: 1rem;
+    color: #b8a898;
+    font-weight: 300;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 0.8rem;
+    color: #8a7a6a;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .meta-item span { color: var(--gold); }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: white;
+    border: 1px solid var(--light-rule);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+  }
+  .toc h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .toc ol {
+    padding-left: 1.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 2rem;
+  }
+  @media(max-width: 600px){ .toc ol { grid-template-columns: 1fr; } }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--light-rule);
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+
+  /* ── SECTION ── */
+  .section {
+    margin-top: 3rem;
+    scroll-margin-top: 1rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--light-rule);
+  }
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--light-rule);
+    font-weight: 700;
+    line-height: 1;
+    min-width: 2rem;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 1rem; color: #2a2420; }
+
+  /* ── DEFINITION BOX ── */
+  .def-box {
+    background: white;
+    border: 1px solid var(--light-rule);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    position: relative;
+  }
+  .def-box::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -0.6rem;
+    left: 1rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+  }
+  .def-box.teal::before { background: var(--teal); }
+  .def-box.gold::before { background: var(--gold); }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--light-rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 1.1rem 1.2rem;
+  }
+  .card.teal { border-top-color: var(--teal); }
+  .card.gold { border-top-color: var(--gold); }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .card p { font-size: 0.88rem; color: var(--muted); margin: 0; }
+
+  /* ── THEORY TABLE ── */
+  .theory-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .theory-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--light-rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media(max-width: 600px){ .theory-row { grid-template-columns: 1fr; } }
+  .theory-name {
+    background: var(--ink);
+    color: white;
+    padding: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+  }
+  .theory-desc, .theory-crit {
+    padding: 1rem;
+    background: white;
+    font-size: 0.87rem;
+    color: var(--ink);
+  }
+  .theory-desc { border-right: 1px solid var(--light-rule); }
+  .theory-crit { background: #fdf8f4; }
+  .col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── QUOTE ── */
+  blockquote {
+    border-left: 4px solid var(--gold);
+    background: white;
+    padding: 1rem 1.5rem;
+    margin: 1.25rem 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ── LIST ── */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  .styled-list li {
+    padding: 0.45rem 0 0.45rem 1.4rem;
+    position: relative;
+    border-bottom: 1px solid var(--light-rule);
+    font-size: 0.93rem;
+  }
+  .styled-list li:last-child { border-bottom: none; }
+  .styled-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .styled-list.teal li::before { color: var(--teal); }
+  .styled-list.gold li::before { color: var(--gold); }
+
+  /* ── MCCUEN TABLE ── */
+  .mccuen-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.85rem;
+  }
+  .mccuen-table th {
+    background: var(--ink);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .mccuen-table td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--light-rule);
+    vertical-align: top;
+  }
+  .mccuen-table tr:nth-child(even) td { background: #fdf9f5; }
+  .mccuen-table .stage {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── EXAM CALLOUT ── */
+  .exam-box {
+    background: linear-gradient(135deg, #fff8e1, #fff3cd);
+    border: 1px solid #f0c040;
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .exam-box h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8a6000;
+    margin-bottom: 0.75rem;
+  }
+  .exam-q {
+    background: white;
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.87rem;
+    border-left: 3px solid var(--gold);
+  }
+  .exam-q strong { color: var(--accent); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+  .exam-ans {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 0.3rem;
+  }
+
+  /* ── CASE STUDY ── */
+  .case-box {
+    border: 1px solid var(--light-rule);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 1.25rem 0;
+  }
+  .case-header {
+    background: var(--accent);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .case-body { padding: 1.2rem 1.5rem; background: white; font-size: 0.9rem; }
+
+  /* ── KEY TERMS ── */
+  .key-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .term {
+    background: var(--tag-bg);
+    border: 1px solid #d4c4a8;
+    color: var(--ink);
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--light-rule);
+    margin: 2.5rem 0;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .hl { background: var(--highlight); padding: 0.1em 0.25em; border-radius: 2px; }
+  .accent-text { color: var(--accent); font-weight: 700; }
+  .teal-text { color: var(--teal); font-weight: 700; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-top: 1px solid var(--light-rule);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    header { background: #1a1410 !important; -webkit-print-color-adjust: exact; }
+    .toc ol { grid-template-columns: 1fr; }
+    .theory-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="course-tag">NPTEL · IIT Kharagpur · Dr. Susmita Mukhopadhyay</div>
+  <h1>Ethics in <em>Engineering Practice</em></h1>
+  <p class="subtitle">Comprehensive Study Notes — Week 1</p>
+  <div class="meta-row">
+    <div class="meta-item">Lectures: <span>1 · 2 · 3 · 4 · 5</span></div>
+    <div class="meta-item">Topics: <span>10 Core Concepts</span></div>
+    <div class="meta-item">Assignment: <span>10/10 ✓</span></div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s1">The Engineering Profession</a></li>
+      <li><a href="#s2">Why Ethics in Engineering?</a></li>
+      <li><a href="#s3">Personal vs. Professional Ethics</a></li>
+      <li><a href="#s4">What is Engineering Ethics?</a></li>
+      <li><a href="#s5">Ethics, Morals & Law</a></li>
+      <li><a href="#s6">Ethical Theories (All Four)</a></li>
+      <li><a href="#s7">McCuen's Ethical Dimensions</a></li>
+      <li><a href="#s8">Code of Ethics & Profession</a></li>
+      <li><a href="#s9">Classic Case Studies</a></li>
+      <li><a href="#s10">Assignment Q&A Analysis</a></li>
+    </ol>
+  </div>
+
+  <!-- ── SECTION 1 ── -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>The Engineering Profession</h2>
+    </div>
+
+    <blockquote>
+      "The engineer simply cannot deny that he did it. If his works do not work, he is damned forever."
+      <cite>— Herbert Hoover (Terman, 1965)</cite>
+    </blockquote>
+
+    <p>This quote captures a defining feature of engineering: <strong>complete public accountability</strong>. Unlike doctors who can bury mistakes, or lawyers who can argue their way out, an engineer's work stands exposed for all to see and judge.</p>
+
+    <h3 style="margin: 1.25rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">How Engineers View Themselves</h3>
+    <div class="cards">
+      <div class="card">
+        <h3>Problem-Solvers</h3>
+        <p>Engineers see themselves as creative problem-solvers who enjoy finding solutions to complex challenges.</p>
+      </div>
+      <div class="card teal">
+        <h3>Public Servants</h3>
+        <p>Engineering provides public service and benefits people — it is an honourable profession with esprit de corps.</p>
+      </div>
+      <div class="card gold">
+        <h3>Freedom-Seekers</h3>
+        <p>Engineering provides the most freedom of all professions (Florman, 1976).</p>
+      </div>
+    </div>
+
+    <h3 style="margin: 1.25rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">How the Public Views Engineers</h3>
+    <ul class="styled-list teal">
+      <li><strong>Utilitarians</strong> — engineers who maximise overall social utility</li>
+      <li><strong>Positivists</strong> — rational, logical, systematic thinkers</li>
+      <li><strong>Applied Physical Scientists</strong> — practical implementers of science</li>
+      <li><strong>Socialist view</strong> — drivers who convert technology to social benefit</li>
+    </ul>
+    <p>The rational, systematic approach of engineers can <span class="hl">alienate them from the public</span> due to technicalities, creating a perception gap.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 2 ── -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>Why Ethics in Engineering?</h2>
+    </div>
+
+    <div class="def-box" data-label="NSPE Preamble — Code of Conduct 2007">
+      <p style="margin:0; font-style: italic;">"Engineers shall at all times recognize that their primary obligation is to protect the safety, health, property, and welfare of the public. If their professional judgment is overruled under circumstances where the safety, health, property, or welfare of the public are endangered, they shall notify their employer or client and such other authority as may be appropriate."</p>
+    </div>
+
+    <p>Engineering sits at the <strong>confluence of technology, social science, and business</strong>. Because engineering is done <em>by people and for people</em>, and because engineers' decisions impact all three of these domains, ethics is permanently embedded in practice.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Public Nature of Work</h3>
+        <p>Every engineering output is visible and judged by society — hiding errors is impossible.</p>
+      </div>
+      <div class="card teal">
+        <h3>Societal Duty</h3>
+        <p>The interest of affected groups must always prevail over personal profit motives.</p>
+      </div>
+      <div class="card gold">
+        <h3>Wide Impact</h3>
+        <p>Decisions ripple across products, companies, the environment, law, and the public.</p>
+      </div>
+    </div>
+
+    <h3 style="margin: 1.25rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Domains Affected by Engineering Decisions</h3>
+    <ul class="styled-list">
+      <li>Products and Services (safety and utility)</li>
+      <li>The Company and its Stockholders</li>
+      <li>The Public and Society (welfare benefits)</li>
+      <li>Environment — Earth and beyond</li>
+      <li>The Profession (public perception)</li>
+      <li>The Law (legislation and regulation)</li>
+      <li>Personal Position (job security, internal moral conflict)</li>
+    </ul>
+
+    <div class="case-box">
+      <div class="case-header">⚠ Warning Case — The Therac-25 X-Ray Machine</div>
+      <div class="case-body">
+        <p>The Therac-25 radiation therapy machine <strong>killed or seriously injured patients</strong> at multiple North American hospitals (1985–1987). A simple typographical error by an operator caused a filter to drop out of position, delivering a massive radiation overdose. The machine was poorly designed and inadequately tested — hardware-software integration was totally inadequate. The manufacturer, Atomic Energy of Canada Ltd., eventually went bankrupt.</p>
+        <p style="margin:0"><strong>Lesson:</strong> Inadequate testing and negligent management responses to known safety issues can have fatal consequences.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 3 ── -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>Personal vs. Professional Ethics</h2>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Personal Ethics</h3>
+        <p>Governs how we treat others in day-to-day life. Many of these principles apply equally to engineering situations.</p>
+      </div>
+      <div class="card teal">
+        <h3>Professional Ethics</h3>
+        <p>Involves choices at an <em>organisational level</em> — relationships between corporations, corporations and government, or corporations and groups of individuals. (Fleddermann, 2012)</p>
+      </div>
+    </div>
+
+    <p>The boundary between personal and professional ethics is <span class="hl">not always clear</span>. Professional ethics often operates at a larger scale with greater societal consequences.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 4 ── -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>What is Engineering Ethics?</h2>
+    </div>
+
+    <div class="def-box" data-label="Definition — Martin & Schinzinger (1996)">
+      <p style="margin:0.5rem 0 0.2rem"><strong>(1)</strong> The study of the <em>moral issues and decisions</em> confronting individuals and organizations involved in engineering.</p>
+      <p style="margin:0.2rem 0 0"><strong>(2)</strong> The study of related questions about <em>moral conduct, character, policies, and relationships</em> of people and corporations involved in technological activity.</p>
+    </div>
+
+    <p>Engineering ethics concerns: <span class="accent-text">what the standards should be</span> and <span class="teal-text">how to apply them to particular situations</span> (Harris, Pritchard, and Rabins 1995).</p>
+
+    <h3 style="margin: 1.25rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Situations Where Ethical Issues Arise</h3>
+    <ul class="styled-list teal">
+      <li>Conceptualization, Design, Testing, Manufacturing, Sales, Service</li>
+      <li>Supervision and Project Teams</li>
+      <li>Project timelines and budgets</li>
+      <li>Expectations, opinions, or judgments</li>
+      <li>Unsafe or less-than-useful products</li>
+      <li>Products designed for obsolescence</li>
+      <li>Inferior materials or components</li>
+      <li>Unforeseen harmful effects on society</li>
+    </ul>
+
+    <h3 style="margin: 1.25rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Opinions vs. Judgments (Whitbeck, 2011)</h3>
+    <div class="def-box data-teal" data-label="Key Distinction">
+      <p>An opinion that is <strong>supported by reasons</strong> → a <span class="accent-text">Reasoned Judgment</span></p>
+      <p>An opinion given by someone with <strong>special training or experience</strong> → an <span class="teal-text">Expert / Professional Opinion</span></p>
+      <p style="margin:0">An opinion that is <strong>neither supported by reasons nor given by a qualified judge</strong> → a <span style="color:#888">"Mere" Opinion</span></p>
+    </div>
+    <p>Ethics should be based on <strong>reasoned judgments</strong>, not mere opinions.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 5 ── -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>Ethics, Morals & The Law</h2>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Morals</h3>
+        <p>Principles of right and wrong — the foundation of all ethical thought.</p>
+      </div>
+      <div class="card teal">
+        <h3>Ethics</h3>
+        <p>A <em>set of moral principles</em> guiding behaviour and action in specific contexts.</p>
+      </div>
+      <div class="card gold">
+        <h3>Laws</h3>
+        <p><em>Binding</em> codes of conduct that are formally recognized and enforced by the state.</p>
+      </div>
+    </div>
+
+    <div class="def-box" data-label="Classification of Actions">
+      <p>These three domains overlap in important ways:</p>
+      <ul class="styled-list" style="margin:0.5rem 0 0">
+        <li><strong>Ethical &amp; Legal</strong> — the ideal zone (e.g., building safe, code-compliant structures)</li>
+        <li><strong>Unethical but Legal</strong> — e.g., planned obsolescence; technically allowed but morally questionable</li>
+        <li><strong>Ethical but Illegal</strong> — e.g., civil disobedience against an unjust law</li>
+        <li><strong>Unethical &amp; Illegal</strong> — e.g., falsifying safety test results</li>
+      </ul>
+    </div>
+    <p>Company policies add a fourth layer — internal rules that may exceed legal minimums.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 6 ── -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2>The Four Ethical Theories</h2>
+    </div>
+
+    <p>Four major ethical theories are studied in engineering ethics, each emphasising a different moral concept. <span class="hl">You don't have to pick one</span> — use all of them to analyse a problem from multiple angles.</p>
+
+    <div class="theory-grid">
+      <!-- Utilitarianism -->
+      <div class="theory-row">
+        <div class="theory-name">Utilitarianism</div>
+        <div class="theory-desc">
+          <span class="col-label">Core Idea</span>
+          Actions are good if they <strong>maximise human well-being for society as a whole</strong> (collectivist). Balances the needs of society vs. the individual.
+          <br><br>
+          <strong>Act utilitarianism</strong> (J.S. Mill, 1806–1873): judges individual actions — common moral rules like "don't steal" are good guidelines from centuries of experience.
+          <br><br>
+          <strong>Rule utilitarianism</strong>: moral rules are paramount; adhering to rules like "do not harm others" will ultimately lead to the most good overall.
+        </div>
+        <div class="theory-crit">
+          <span class="col-label">Criticism</span>
+          • What is best for everyone may harm a specific individual or minority group.<br><br>
+          • Impossible to know exactly what consequences an action will produce in advance.<br><br>
+          • Cost-benefit analysis (its engineering application) misses intangible values like wilderness preservation.
+        </div>
+      </div>
+
+      <!-- Duty Ethics -->
+      <div class="theory-row">
+        <div class="theory-name">Duty Ethics<br><small style="font-size:0.75rem; opacity:0.7">(Deontological)</small></div>
+        <div class="theory-desc">
+          <span class="col-label">Core Idea</span>
+          Certain duties must be performed <strong>regardless of consequences</strong> — be honest, treat others fairly, do not injure others (Immanuel Kant, 1724–1804).
+          <br><br>
+          Actions are ethical because they express <em>respect for persons</em> and are <em>universal principles</em>.
+        </div>
+        <div class="theory-crit">
+          <span class="col-label">Criticism</span>
+          • Rights of one group may conflict with rights of another — hard to determine priority.<br><br>
+          • Does not always account for the overall good of society.<br><br>
+          • Can lead to extreme outcomes when duties conflict.
+        </div>
+      </div>
+
+      <!-- Rights Ethics -->
+      <div class="theory-row">
+        <div class="theory-name">Rights Ethics</div>
+        <div class="theory-desc">
+          <span class="col-label">Core Idea</span>
+          People have <strong>fundamental moral rights</strong> that others have a duty to respect (John Locke, 1632–1704). Right to life, liberty, and property.
+          <br><br>
+          Any action violating these rights is ethically unacceptable. Overall social good is NOT the only consideration.
+        </div>
+        <div class="theory-crit">
+          <span class="col-label">Criticism</span>
+          Same as duty ethics — rights may conflict between groups, and a single individual's rights could block socially beneficial projects (e.g., a dam).
+        </div>
+      </div>
+
+      <!-- Virtue Ethics -->
+      <div class="theory-row">
+        <div class="theory-name">Virtue Ethics</div>
+        <div class="theory-desc">
+          <span class="col-label">Core Idea</span>
+          Focuses on <strong>what kind of person we should be</strong>. Actions are right if they display good character traits (virtues) and wrong if they display vices (Schinzinger &amp; Martin, 2000).
+          <br><br>
+          Virtues: responsibility, honesty, competence, loyalty, trustworthiness, fairness, caring, citizenship, respect.
+          <br>
+          Vices: dishonesty, disloyalty, irresponsibility, incompetence.
+        </div>
+        <div class="theory-crit">
+          <span class="col-label">Application in Engineering</span>
+          Ask: Is this honest? Does it show loyalty? Have I acted responsibly? First identify applicable virtues/vices, then determine what each suggests. Ensure identified virtues are truly virtuous and won't lead to negative consequences.
+        </div>
+      </div>
+    </div>
+
+    <div class="def-box teal" data-label="Key Exam Point — Which Theory to Use?">
+      <p style="margin:0">You do NOT have to choose one theory. <strong>Use all four to analyse a problem from different angles.</strong> Often they lead to the same conclusion — as with the chemical plant groundwater example: rights ethics, utilitarianism, and virtue ethics all agree the pollution is unethical.</p>
+    </div>
+
+    <div class="key-terms">
+      <span class="term">J.S. Mill — Act Utilitarianism</span>
+      <span class="term">Immanuel Kant — Duty Ethics</span>
+      <span class="term">John Locke — Rights Ethics</span>
+      <span class="term">Schinzinger & Martin — Virtue Ethics</span>
+      <span class="term">Leon Festinger — Cognitive Dissonance (1959)</span>
+      <span class="term">Kohlberg — Moral Reasoning Development</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 7 ── -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <h2>McCuen's Ethical Dimensions</h2>
+    </div>
+
+    <p>McCuen (1979) identified six stages of professional engineering morality, grouped into three levels:</p>
+
+    <table class="mccuen-table">
+      <tr>
+        <th>Stage</th>
+        <th>Level</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td class="stage">Stage 1</td>
+        <td>Pre-professional</td>
+        <td>Concern is for the gain of the <strong>individual</strong> — not the company, client, or profession.</td>
+      </tr>
+      <tr>
+        <td class="stage">Stage 2</td>
+        <td>Pre-professional</td>
+        <td>Corporate loyalty, client confidence, and proper conduct pursued, but <strong>only for personal gain and advancement</strong>. ← <em>Assignment favourite</em></td>
+      </tr>
+      <tr>
+        <td class="stage">Stage 3</td>
+        <td>Professional</td>
+        <td>Loyalty to company is primary. Team-player behaviour <strong>precludes concern for society and environment</strong>.</td>
+      </tr>
+      <tr>
+        <td class="stage">Stage 4</td>
+        <td>Professional</td>
+        <td>Loyalty to company is connected to loyalty to the profession. Good engineering is good for the profession, but societal concerns are <strong>not emphasised</strong>.</td>
+      </tr>
+      <tr>
+        <td class="stage">Stage 5</td>
+        <td>Principled Professional</td>
+        <td>Service to human welfare is paramount. Societal rules, morals and values may <strong>trump professional standards and corporate loyalty</strong>.</td>
+      </tr>
+      <tr>
+        <td class="stage">Stage 6</td>
+        <td>Principled Professional</td>
+        <td>Conduct guided solely by a sense of fairness and genuine concern for society, individuals, and the environment. Decisions based on well-established personal principles that may <strong>contradict professional codes and social rules</strong>.</td>
+      </tr>
+    </table>
+
+    <div class="def-box gold" data-label="Assignment Q5 — Direct Match">
+      <p style="margin:0">When <em>"corporate loyalty, client confidence, proper conduct are pursued but only for personal gain and advancement"</em> → this is <strong class="accent-text">Stage 2, McCuen's Ethical Dimension</strong> (Pre-professional level).</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 8 ── -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <h2>Code of Ethics & The Profession</h2>
+    </div>
+
+    <h3 style="margin: 0 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Defining a Profession</h3>
+    <p>Professions require advanced study + mastery of specialised knowledge + promotion of others' well-being. Key attributes:</p>
+    <ul class="styled-list">
+      <li>Sophisticated skills requiring judgment and discretion (non-routine, non-mechanisable)</li>
+      <li>Extensive formal education (not just apprenticeship)</li>
+      <li>Self-regulated through professional societies that set standards of conduct</li>
+      <li>Results in significant public good</li>
+    </ul>
+
+    <div class="def-box" data-label="Code of Ethics — What It IS">
+      <ul style="padding-left:1.2rem; margin:0">
+        <li>Expresses rights, duties, and obligations of profession members</li>
+        <li>Provides a <strong>framework</strong> for ethical judgment</li>
+        <li>A starting point for ethical decision-making</li>
+        <li>Defines roles and responsibilities of professionals</li>
+      </ul>
+    </div>
+
+    <div class="def-box teal" data-label="Code of Ethics — What It is NOT">
+      <ul style="padding-left:1.2rem; margin:0">
+        <li>NOT a recipe or algorithm for ethical behaviour</li>
+        <li>NOT a substitute for sound judgment</li>
+        <li>NOT a legal document</li>
+        <li>Does NOT create new moral or ethical principles</li>
+      </ul>
+    </div>
+
+    <h3 style="margin: 1.5rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Eight Essential Roles of Codes of Ethics</h3>
+    <ul class="styled-list gold">
+      <li><strong>1. Serving and protecting the public</strong> — primary commitment; engineers serve health, safety, and welfare</li>
+      <li><strong>2. Guidance</strong> — articulates main obligations; supplementary guidelines give specifics</li>
+      <li><strong>3. Inspiration</strong> — motivates ethical conduct; voices what it means to be a member of the profession</li>
+      <li><strong>4. Shared standards</strong> — establishes minimum (but hopefully high) standards for all professionals</li>
+      <li><strong>5. Supporting responsible professionals</strong> — gives moral backing to engineers under pressure to act unethically</li>
+      <li><strong>6. Education and mutual understanding</strong> — used in classrooms and professional societies to discuss ethical issues</li>
+      <li><strong>7. Deterrence and discipline</strong> — formal basis for investigating unethical conduct; societies can suspend/expel members</li>
+      <li><strong>8. Contributing to profession's image</strong> — presents positive image; builds public trust; reduces demand for government regulation</li>
+    </ul>
+
+    <div class="def-box gold" data-label="Abuse of Codes">
+      <p style="margin:0">The worst abuse: using codes to <strong>restrict honest moral effort</strong> in order to preserve the profession's public image and protect the status quo. Preoccupation with a "shiny public image" can silence healthy dialogue and criticism.</p>
+    </div>
+
+    <h3 style="margin: 1.5rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Ethical Dilemmas</h3>
+    <div class="def-box" data-label="Definition">
+      <p style="margin:0">Situations in which moral reasons come into conflict, or in which the applications of moral values are unclear, and it is not immediately obvious what should be done. Codes of ethics serve as a guide for resolving them.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Right or Wrong</h3>
+        <p>One course of action is clearly obligatory — failing to do it is unethical. Codes specify: obey law, no bribes, speak truthfully, maintain confidentiality.</p>
+      </div>
+      <div class="card teal">
+        <h3>Better or Worse</h3>
+        <p>Two or more reasonable solutions exist, none mandatory. Solutions may be better or worse in some but not all respects — judgment required.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 9 ── -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <h2>Classic Case Studies</h2>
+    </div>
+
+    <div class="case-box">
+      <div class="case-header">Case 1 — The Aberdeen Three (Classic Engineering Ethics Case)</div>
+      <div class="case-body">
+        <p><strong>Location:</strong> Aberdeen Proving Ground, Maryland (U.S. Army weapons development & test center)</p>
+        <p><strong>Accused:</strong> Carl Gepp (Plant Manager), William Dee (Chemical Weapons), Robert Lentz (Manufacturing Processes)</p>
+        <p><strong>Period of Violations:</strong> 1983–1986 — inspections revealed serious safety hazards including carcinogenic substances in open containers, incompatible chemicals stored together, leaking toxic barrels, and 200 gallons of sulfuric acid that leaked into a local river.</p>
+        <p><strong>Charged under:</strong> RCRA (Resource Conservation and Recovery Act, 1976) — banning dumping of solid hazardous wastes with criminal penalties.</p>
+        <p><strong>Defense:</strong> They were unaware the practices were illegal; they followed accepted practices at the Pilot Plant.</p>
+        <p><strong>Outcome (1989):</strong> All three convicted of illegally storing, treating, and disposing of hazardous wastes. Sentenced to 3 years' probation + 1,000 hours community service (relative leniency due to large court costs already incurred).</p>
+        <p style="margin:0"><strong>Key Ethical Lesson:</strong> As managers, they were <em>ultimately responsible</em> for how chemicals were stored and safety equipment maintained — even if they didn't physically handle the chemicals themselves.</p>
+      </div>
+    </div>
+
+    <div class="case-box">
+      <div class="case-header">Case 2 — Benjamin E. Linder (Engineer Who Sacrificed His Life)</div>
+      <div class="case-body">
+        <p>A mechanical engineering graduate from University of Washington who volunteered in Nicaragua to build a small-scale hydroelectric plant for a rural community with no reliable electricity. He taught local people to build, operate, and maintain the plant.</p>
+        <p style="margin:0">Despite knowing his life was endangered by the <em>contras</em>, he continued his work. He was killed in 1987. In 1988, he was awarded the <strong>IEEE SSIT Award for Outstanding Service in the Public Interest</strong> for his courageous and altruistic efforts.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── SECTION 10 ── -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Assignment Q&A Analysis</h2>
+    </div>
+
+    <p>All 10 questions from your Week 1 assignment — with the concept tested and why the answer is correct.</p>
+
+    <div class="exam-box">
+      <h3>⭑ Week 1 Assignment — Question Breakdown</h3>
+
+      <div class="exam-q">
+        <strong>Q1</strong> — "The first concept explaining by Dr. Nitya Sanyal was ___ and it was propounded by ___."
+        <br><span class="exam-ans">Answer: b — Right Ethics, John Locke (1632–1704)</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Rights Ethics was formulated by John Locke (1632–1704) who said humans have the right to life, liberty, and property.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q2</strong> — "According to you, the latter concept she was explaining to her students was:"
+        <br><span class="exam-ans">Answer: a — Virtue Ethics</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Virtue ethics focuses on good character traits — responsibility, honesty, competence, loyalty.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q3</strong> — "Even though Krishanu doesn't do it for the rewards, being a responsible person at work can help him achieve more than others who don't have this character. Krishanu is displaying ___."
+        <br><span class="exam-ans">Answer: a — Virtue Ethics</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Acting on good character traits (responsibility) without concern for rewards is the hallmark of virtue ethics.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q4</strong> — "'Actions are considered right if they support good character traits and wrong if they support bad character traits.' It is said by whom?"
+        <br><span class="exam-ans">Answer: b — Schinzinger and Martin</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: This exact definition of virtue ethics is attributed to Schinzinger and Martin (2000) in the lecture slides.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q5</strong> — "When corporate loyalty, client confidence, proper conduct are pursued but only for personal gain and advancement, then such scenario is illustrated through which theory?"
+        <br><span class="exam-ans">Answer: d — Stage 2, McCuen's Ethical Dimension</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Stage 2 (Pre-professional) — corporate loyalty pursued only for personal advancement, not genuine professional concern.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q6</strong> — "Does 'supporting responsible professional' role followed by code of ethics?"
+        <br><span class="exam-ans">Answer: a — Does follow</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: "Supporting responsible professionals" is one of the eight essential roles of a code of ethics — it DOES follow.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q7</strong> — "Adhering the rules like 'do not harm others' and 'do not steal' might not always maximize good in a particular situation, but overall, adhering to moral rules will ultimately lead to the most good. The above paragraph illustrates the following theory—"
+        <br><span class="exam-ans">Answer: a — Rule Utilitarianism</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Rule utilitarians hold that overall adherence to moral rules produces the most good — even if not optimal in specific cases.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q8</strong> — Assertion A: "Ethical dilemmas are situations in which moral reasons come into conflict." Reason R: "It is not immediately obvious what should be done as code of ethics does not serve as a starting point."
+        <br><span class="exam-ans">Answer: c — A is true but R is false</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: A is correct (definition of ethical dilemma). R is FALSE — codes of ethics DO serve as a starting point for ethical decision making.</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q9</strong> — Assertion A: "The honest moral effort on the part of individual engineers to preserve the public image and protect the status quo is to be restricted." Reason R: "Article 3.1 of code of ethics makes it obligatory to maintain preoccupied shiny public image at any cost."
+        <br><span class="exam-ans">Answer: c — A is true but R is false</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: A is true (abuse of codes restricts honest moral effort). R is false — Article 3.1 requires honesty and integrity, NOT preservation of a "shiny image at any cost".</small>
+      </div>
+
+      <div class="exam-q">
+        <strong>Q10</strong> — "Utilitarianism is somewhat of a ___."
+        <br><span class="exam-ans">Answer: c — Collectivist approach</span>
+        <br><small style="color:#666; font-size:0.8rem;">Concept: Utilitarianism focuses on maximising the well-being of society as a whole — it is explicitly described as a "collectivist approach" in the lecture.</small>
+      </div>
+    </div>
+
+    <h3 style="margin: 1.5rem 0 0.75rem; font-family: 'Playfair Display', serif; font-size: 1.1rem;">Common Traps to Avoid</h3>
+    <ul class="styled-list">
+      <li>Virtue ethics → <strong>Schinzinger and Martin</strong>, not Kant or Locke</li>
+      <li>Rights ethics → <strong>John Locke (1632–1704)</strong>, not Immanuel Kant</li>
+      <li>Duty ethics → <strong>Immanuel Kant (1724–1804)</strong>, not Locke</li>
+      <li>McCuen Stage 2 ≠ Stage 4 — Stage 2 is purely personal gain; Stage 4 connects company loyalty to the profession</li>
+      <li>Code of ethics DOES serve as a starting point — never "does not serve"</li>
+      <li>Utilitarianism = <strong>collectivist</strong>, not individualist or independent</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- QUICK REFERENCE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">⚡</div>
+      <h2>Quick Reference — Key Thinkers</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <h3>John Stuart Mill</h3>
+        <p>1806–1873. Act Utilitarianism. Common moral rules are guidelines from centuries of human experience.</p>
+      </div>
+      <div class="card teal">
+        <h3>Immanuel Kant</h3>
+        <p>1724–1804. Duty Ethics. Moral duties are fundamental and express respect for persons as universal principles.</p>
+      </div>
+      <div class="card gold">
+        <h3>John Locke</h3>
+        <p>1632–1704. Rights Ethics. Humans have fundamental rights to life, liberty, and property.</p>
+      </div>
+      <div class="card">
+        <h3>Schinzinger & Martin</h3>
+        <p>2000. Virtue Ethics — "actions right if they support good character traits, wrong if they support bad ones."</p>
+      </div>
+      <div class="card teal">
+        <h3>McCuen (1979)</h3>
+        <p>Six stages of professional engineering morality across three levels: pre-professional, professional, principled.</p>
+      </div>
+      <div class="card gold">
+        <h3>Harris, Pritchard & Rabins</h3>
+        <p>1995/2000. Engineering ethics concerns what standards should be and how to apply them. Defined roles and responsibilities via codes.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  NPTEL — Ethics in Engineering Practice · Week 1 Study Notes · IIT Kharagpur<br>
+  Dr. Susmita Mukhopadhyay · Vinod Gupta School of Management
+</footer>
+
+</body>
+</html>

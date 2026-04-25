@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 Notes – Ethics in Engineering Practice</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --border: #e4e0d8;
+    --text: #1a1816;
+    --muted: #6b6560;
+    --accent: #2d5a8e;
+    --accent-light: #e8f0fa;
+    --green: #1a6b45;
+    --green-light: #e6f4ed;
+    --amber: #7a4f0a;
+    --amber-light: #fdf3e0;
+    --red: #8b2020;
+    --red-light: #fdf0f0;
+    --purple: #5a3a8e;
+    --purple-light: #f2eeff;
+    --teal: #0f5e54;
+    --teal-light: #e4f7f3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+  .header {
+    background: var(--accent);
+    color: white;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .header .course { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem; font-family: 'Helvetica Neue', sans-serif; }
+  .header h1 { font-size: 26px; font-weight: normal; margin-bottom: 0.4rem; }
+  .header .meta { font-size: 13px; opacity: 0.7; font-family: 'Helvetica Neue', sans-serif; }
+
+  .toc {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+  }
+  .toc-title { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .toc-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; list-style: none; }
+  .toc-list a { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; color: var(--accent); text-decoration: none; }
+  .toc-list a:hover { text-decoration: underline; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .section { margin-bottom: 3rem; }
+  .section-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.6rem; margin-bottom: 1.5rem;
+  }
+  .section-num {
+    background: var(--accent); color: white;
+    font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 19px; font-weight: normal; color: var(--accent); }
+
+  h3 { font-size: 15px; font-weight: bold; margin: 1.5rem 0 0.6rem; font-family: 'Helvetica Neue', sans-serif; letter-spacing: 0.3px; }
+
+  p { margin-bottom: 0.9rem; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-title { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.6rem; }
+
+  .info-box {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-light);
+    padding: 0.9rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+  }
+  .info-box .label { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.3rem; }
+
+  .warn-box {
+    border-left: 3px solid #c07a14;
+    background: var(--amber-light);
+    padding: 0.9rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+  }
+  .warn-box .label { color: var(--amber); font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+
+  .good-box {
+    border-left: 3px solid #1a6b45;
+    background: var(--green-light);
+    padding: 0.9rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+  }
+  .good-box .label { color: var(--green); font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+
+  .type-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .type-card .type-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 0.4rem;
+  }
+  .type-card.blue .type-label { color: var(--accent); }
+  .type-card.blue { border-top: 3px solid var(--accent); }
+  .type-card.green .type-label { color: var(--green); }
+  .type-card.green { border-top: 3px solid var(--green); }
+  .type-card.amber .type-label { color: var(--amber); }
+  .type-card.amber { border-top: 3px solid #c07a14; }
+  .type-card.purple .type-label { color: var(--purple); }
+  .type-card.purple { border-top: 3px solid var(--purple); }
+  .type-card.teal .type-label { color: var(--teal); }
+  .type-card.teal { border-top: 3px solid var(--teal); }
+  .type-card.red .type-label { color: var(--red); }
+  .type-card.red { border-top: 3px solid var(--red); }
+
+  .steps-list { counter-reset: steps; list-style: none; }
+  .steps-list li {
+    counter-increment: steps;
+    display: flex; gap: 1rem; align-items: flex-start;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .steps-list li::before {
+    content: counter(steps);
+    background: var(--accent); color: white;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px; font-weight: bold;
+    min-width: 24px; height: 24px;
+    border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .bullet-list { list-style: none; }
+  .bullet-list li { padding: 0.3rem 0 0.3rem 1.25rem; position: relative; }
+  .bullet-list li::before { content: '—'; position: absolute; left: 0; color: var(--muted); }
+
+  .exam-section {
+    background: #fffdf5;
+    border: 1px solid #e8d9a0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .exam-section h3 { color: #7a4f0a; margin-top: 0; }
+  .q-item { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px dashed #e0d090; }
+  .q-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .q-text { font-weight: bold; margin-bottom: 0.4rem; }
+  .q-ans { background: var(--green-light); border-radius: 4px; padding: 0.3rem 0.6rem; font-family: 'Helvetica Neue', sans-serif; font-size: 13px; color: var(--green); display: inline-block; margin-bottom: 0.3rem; }
+  .q-exp { font-size: 13.5px; color: var(--muted); }
+
+  .definition-box {
+    background: var(--purple-light);
+    border-left: 3px solid var(--purple);
+    padding: 0.9rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+  }
+  .definition-box .label { font-family: 'Helvetica Neue', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); margin-bottom: 0.3rem; }
+
+  .case-study {
+    background: var(--teal-light);
+    border: 1px solid #9fd0c7;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+  }
+  .case-study .cs-title { font-family: 'Helvetica Neue', sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 0.6rem; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .pill {
+    display: inline-block;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 2px 8px; border-radius: 4px;
+    margin-right: 4px;
+  }
+  .pill-blue { background: var(--accent-light); color: var(--accent); }
+  .pill-green { background: var(--green-light); color: var(--green); }
+  .pill-red { background: var(--red-light); color: var(--red); }
+  .pill-amber { background: var(--amber-light); color: var(--amber); }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .container { padding: 1rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="course">NPTEL · Ethics in Engineering Practice · IIT Kharagpur</div>
+  <h1>Week 2 — Central Professional Responsibilities of Engineers</h1>
+  <div class="meta">Lectures 6–10 &nbsp;·&nbsp; Dr. Susmita Mukhopadhayay, Vinod Gupta School of Management</div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <ul class="toc-list">
+    <li><a href="#confidentiality">1. Confidentiality</a></li>
+    <li><a href="#conflict">2. Conflict of Interest</a></li>
+    <li><a href="#competitive">3. Competitive Bidding</a></li>
+    <li><a href="#whistleblowing">4. Whistleblowing</a></li>
+    <li><a href="#rights">5. Rights of Engineers</a></li>
+    <li><a href="#climate">6. Ethical Corporate Climate</a></li>
+    <li><a href="#theories">7. Ethical Theories</a></li>
+    <li><a href="#exam">8. Exam-Ready Q&A</a></li>
+  </ul>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1 -->
+  <div class="section" id="confidentiality">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Confidentiality and Proprietary Information</h2>
+    </div>
+
+    <div class="definition-box">
+      <div class="label">Definition</div>
+      The duty to keep secret all information that the employer or client would like kept confidential in order to compete effectively against business rivals. It includes any data about the company's business or technical processes not already in the public domain.
+    </div>
+
+    <p>Confidentiality is a well-established principle across professions — in medicine (doctor–patient), in law (attorney–client privilege), and equally in engineering. Most engineering codes of ethics explicitly include a confidentiality clause.</p>
+
+    <h3>What types of information must be kept confidential?</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Business information</div>
+        <ul class="bullet-list">
+          <li>Number of employees on a project</li>
+          <li>Identity of suppliers</li>
+          <li>Marketing strategies</li>
+          <li>Production costs and yields</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Technical information</div>
+        <ul class="bullet-list">
+          <li>Designs and product formulas</li>
+          <li>Upcoming unreleased products</li>
+          <li>Confidential test results and data</li>
+          <li>Trade secrets and proprietary methods</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Key criterion for deciding what is confidential</h3>
+    <div class="info-box">
+      <div class="label">Important Rule</div>
+      <strong>There is no fixed criterion.</strong> Whatever an employer considers confidential shall be kept confidential. The obligation is employer-defined.
+    </div>
+
+    <h3>Non-Disclosure Agreement (NDA)</h3>
+    <p>Engineers today are required to sign an <strong>NDA (Non-Disclosure Agreement)</strong> — a legal contract that binds them from sharing any proprietary information with outsiders. Government and defence organisations have even more stringent secrecy rules due to national security concerns.</p>
+
+    <h3>Confidentiality when changing jobs</h3>
+    <p>The responsibility does not end when an employee leaves. Former employees are barred <em>indefinitely</em> from revealing trade secrets unless the employer gives explicit consent. This shows that professional integrity involves more than loyalty to one's present employer.</p>
+
+    <div class="case-study">
+      <div class="cs-title">Case Study — VW vs. GM (1997)</div>
+      In 1993, Jose Ignacio Lopez left GM to join Volkswagen, taking confidential documents and colleagues. VW settled in 1997, paying GM $100 million in cash and agreeing to buy $1 billion in parts — a landmark example of trade secret violation consequences.
+    </div>
+
+    <h3>Justifications for confidentiality</h3>
+    <div class="grid-3">
+      <div class="type-card blue">
+        <div class="type-label">Autonomy</div>
+        Respects the right of individuals and organisations to control private information about themselves.
+      </div>
+      <div class="type-card green">
+        <div class="type-label">Trustworthiness</div>
+        Clients expect professionals (engineers, lawyers, doctors) to maintain confidentiality — it is a pillar of professional trust.
+      </div>
+      <div class="type-card amber">
+        <div class="type-label">Public benefit</div>
+        Confidentiality encourages open sharing within professional relationships; without it, clients withhold information, harming outcomes.
+      </div>
+    </div>
+
+    <h3>Confidentiality and Management Policies</h3>
+    <p>Employers sometimes use employment contracts to restrict future employment (geography, time, type of work). However, courts often do not enforce these as they threaten individuals' right to pursue careers freely. Better approaches include portable pension plans, post-employment consulting fees conditional on not joining direct competitors, and — most importantly — fostering a culture of professional responsibility.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section" id="conflict">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Conflict of Interest</h2>
+    </div>
+
+    <div class="definition-box">
+      <div class="label">Definition (Martin & Schinzinger, 2000)</div>
+      A situation of conflict of interest arises <em>"when an interest, if pursued, could keep a professional from meeting one of his obligations."</em> The central concern is its potential to <strong>distort good professional judgment</strong>.
+    </div>
+
+    <div class="warn-box">
+      <div class="label">Conflict of Interest vs. Conflicting Interests</div>
+      <strong>"Conflicting interests"</strong> simply means a person has two or more desires that cannot all be satisfied — there is nothing morally wrong about this. <strong>"Conflict of interest"</strong> in a professional context is different: it is often physically or economically possible to pursue all conflicting interests, but doing so would be <em>morally problematic</em>.
+    </div>
+
+    <h3>Three Types of Conflict of Interest</h3>
+    <div class="grid-3">
+      <div class="type-card blue">
+        <div class="type-label">Actual</div>
+        A direct, present conflict. Example: a chief engineer responsible for selecting project bids who has their own company also bidding for the same project.
+      </div>
+      <div class="type-card amber">
+        <div class="type-label">Potential</div>
+        A situation that could lead to conflict in the future. Example: an engineer becoming close friends with a project's cement supplier.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Apparent</div>
+        Looks like a conflict even if it may not be one. Example: an engineer paid a fee as a percentage of total design cost may be incentivised to produce unnecessarily expensive designs.
+      </div>
+    </div>
+
+    <h3>Common situations that create conflict of interest</h3>
+    <div class="grid-3">
+      <div class="type-card red">
+        <div class="type-label">Gifts, Bribes & Kickbacks</div>
+        A <em>bribe</em> is a substantial sum beyond a business contract aimed at winning an unfair advantage — illegal and immoral. Small gratuities in the normal conduct of business are gifts, not bribes.
+      </div>
+      <div class="type-card teal">
+        <div class="type-label">Interests in Other Companies</div>
+        Working for a competitor as consultant or employee, or having partial ownership/substantial stockholdings in a competitor's business.
+      </div>
+      <div class="type-card green">
+        <div class="type-label">Insider Information</div>
+        Using non-public information to gain personal, family, or friends' advantage — e.g. tipping off friends about an upcoming merger announcement.
+      </div>
+    </div>
+
+    <h3>How to avoid conflict of interest</h3>
+    <ul class="steps-list">
+      <li>Follow the guidance of your company's policy on conflicts of interest.</li>
+      <li>Seek opinion from your manager or trusted co-workers.</li>
+      <li>Use your own ethical judgment to assess whether the situation is appropriate.</li>
+    </ul>
+
+    <div class="good-box">
+      <div class="label">Note — Not always unethical</div>
+      Some conflicts are unavoidable or even acceptable in practice. For example, the US government permits employees of aircraft manufacturers (e.g. Boeing) to serve as government FAA inspectors for those same manufacturers, because the practical necessities of the task outweigh the risk of bias when screened carefully.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section" id="competitive">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Competitive Bidding</h2>
+    </div>
+
+    <div class="definition-box">
+      <div class="label">Definition</div>
+      A process by which a contracting firm selects from among competing vendors or contractors who have submitted bids for a project.
+    </div>
+
+    <p>Engineers are traditionally <strong>restricted</strong> from pure competitive bidding (i.e. competing purely on price) for the following reasons:</p>
+    <ul class="bullet-list">
+      <li>It seems undignified for a profession that has the potential to impact so many lives.</li>
+      <li>Making <em>price</em> the sole determining factor incentivises engineers to cut corners on design quality.</li>
+      <li>This would ultimately undermine engineers' fundamental duty to protect the safety and welfare of the public.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section" id="whistleblowing">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Whistleblowing</h2>
+    </div>
+
+    <div class="definition-box">
+      <div class="label">Definition</div>
+      Whistleblowing occurs when an employee informs the public or higher management of <strong>unethical or illegal behaviour</strong> being conducted by an employer or supervisor. Engineers have a duty to protect the public health and safety, and may be compelled to blow the whistle when something improper is happening in their organisation.
+    </div>
+
+    <h3>Two types of whistleblowing</h3>
+    <div class="grid-2">
+      <div class="type-card blue">
+        <div class="type-label">Anonymous</div>
+        The whistleblower refuses to reveal their name. Can be done via an anonymous memo or email to upper management. Protects the individual from direct retaliation but may be less credible.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Acknowledged (Open)</div>
+        The employee openly identifies themselves and is willing to withstand the inquiry and scrutiny brought on by their accusations. More credible but carries higher personal risk.
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <div class="label">Corporate Perspective</div>
+      Whistleblowing can be very damaging to a corporation — leading to distrust, disharmony, and employees' inability to work together. This is why prevention is preferable.
+    </div>
+
+    <h3>The Four-Point Rule — When is whistleblowing justified?</h3>
+    <ul class="steps-list">
+      <li><strong>Need:</strong> Whistleblowing is genuinely required to prevent or avoid prospective harm — it is not a trivial matter.</li>
+      <li><strong>Proximity:</strong> You have first-hand knowledge; the events are happening close enough to you that they can be detected or properly evaluated.</li>
+      <li><strong>Capability:</strong> You have a reasonable chance of actually stopping the harmful activity through your disclosure.</li>
+      <li><strong>Last Resort:</strong> You have already tried all internal channels and been ignored; this is the only option left.</li>
+    </ul>
+
+    <h3>Preventing Whistleblowing (Employer's Perspective)</h3>
+    <p>The best approach is to create an environment where the <em>need to blow the whistle never arises</em>:</p>
+    <div class="grid-2">
+      <ul class="bullet-list">
+        <li>Establish a strong corporate ethics culture with a clear commitment to ethical values.</li>
+        <li>Maintain clear lines of communication — openness helps address issues well in advance.</li>
+      </ul>
+      <ul class="bullet-list">
+        <li>Ensure all employees have <em>meaningful access</em> to high-level managers to raise concerns.</li>
+        <li>Management must be willing to admit mistakes, publicly if necessary.</li>
+        <li>Encourage healthy dialogue and constructive criticism within the organisation.</li>
+      </ul>
+    </div>
+
+    <div class="case-study">
+      <div class="cs-title">Case Study — BART Engineers (1972)</div>
+      Three engineers at Bay Area Rapid Transit (BART) raised concerns about the safety of the automated train control system. After being repeatedly ignored by supervisors, they escalated anonymously to upper management and eventually to the press via a board member. They were fired for insubordination. The IEEE supported their lawsuit, contending they were fulfilling their ethical duty to protect public safety. This case established the principle that engineers have both the <em>responsibility</em> and the <em>right</em> to raise safety concerns without risking their jobs.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5 -->
+  <div class="section" id="rights">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Rights of Engineers</h2>
+    </div>
+
+    <p>Engineering codes of ethics focus primarily on responsibilities. However, engineers also possess several categories of moral rights:</p>
+
+    <div class="grid-2">
+      <div class="type-card blue">
+        <div class="type-label">Human Rights</div>
+        Fundamental rights to live and freely pursue legitimate interests. Includes the right not to be discriminated against in employment on grounds of sex, race, religion, or age.
+      </div>
+      <div class="type-card green">
+        <div class="type-label">Employee Rights</div>
+        Rights arising from the employment relationship — right to privacy, right to due process, right to reasonable objection to company policies without fear of retribution, and rights specified in employment contracts.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Professional Rights</div>
+        Rights specific to professional practice, including the right of professional conscience and the right of conscientious refusal.
+      </div>
+      <div class="type-card teal">
+        <div class="type-label">Contractual Rights</div>
+        Rights created by employment agreements and organisational policies — e.g. the right to be paid the salary specified in one's contract.
+      </div>
+    </div>
+
+    <h3>Right of Professional Conscience</h3>
+    <div class="info-box">
+      <div class="label">Most fundamental right (Martin & Schinzinger, 2000)</div>
+      The moral right to exercise <strong>professional judgment</strong> in pursuing professional responsibilities. This involves both technical judgment and reasoned moral convictions. It is a "liberty right" — it places an obligation on others (including employers) not to interfere with its proper exercise.
+    </div>
+
+    <h3>Right of Conscientious Refusal</h3>
+    <p>The right to refuse to engage in behaviour that one views as unethical — and to refuse solely because of that ethical judgment. This is a <em>second-order right</em> that arises because professional obligations and employment obligations can sometimes conflict. There are two categories:</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Clear-cut cases</div>
+        Where there is <strong>widespread agreement</strong> in the profession that the act is unethical — refusal is straightforward and well-supported.
+      </div>
+      <div class="card">
+        <div class="card-title">Grey-area cases</div>
+        Where <strong>reasonable people disagree</strong> on whether an act is unethical — these are the most challenging situations and require careful personal judgment.
+      </div>
+    </div>
+
+    <h3>Right of Recognition</h3>
+    <p>Engineers have a right to professional recognition for their work and accomplishments — both fair monetary remuneration and non-monetary forms of recognition. Underpayment leads engineers to focus on financial worries (or moonlighting) rather than their professional duties.</p>
+
+    <h3>Privacy Rights and Equal Opportunity</h3>
+    <ul class="bullet-list">
+      <li><strong>Privacy Right:</strong> The right to a private life outside work. Employers searching an employee's desk without permission — even on suspicion of wrongdoing — challenges this right.</li>
+      <li><strong>Prevention of Sexual Harassment:</strong> Two forms — <em>quid pro quo</em> (conditioning employment benefits on sexual favours) and <em>hostile work environment</em> (lewd remarks, inappropriate contact, etc.). Both are completely unacceptable.</li>
+      <li><strong>Non-discrimination:</strong> One's sex, race, skin colour, age, political or religious outlook must never affect how they are perceived or treated at work.</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6 -->
+  <div class="section" id="climate">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>An Ethical Corporate Climate</h2>
+    </div>
+
+    <div class="definition-box">
+      <div class="label">Definition</div>
+      An ethical corporate climate is a <strong>working environment that is conducive to morally responsible conduct</strong>. Within a corporation it is a combination of formal organisation and policies, informal traditions and practices, and personal attitudes and commitments.
+    </div>
+
+    <h3>Defining features</h3>
+    <div class="grid-2">
+      <ul class="bullet-list">
+        <li>Ethical values are widely acknowledged and appreciated by all managers and employees.</li>
+        <li>Ethical language is honestly applied and recognised as a legitimate part of corporate dialogue.</li>
+      </ul>
+      <ul class="bullet-list">
+        <li>Top management sets the moral tone for the entire organisation.</li>
+        <li>Clear conflict resolution policies exist and are followed.</li>
+        <li>Healthy dialogue and open criticism are encouraged.</li>
+      </ul>
+    </div>
+
+    <div class="good-box">
+      <div class="label">Engineer's Role</div>
+      Engineers can make a vital contribution to ethical corporate culture, especially as they move into technical management and then more general management positions. The ethical character of an organisation is shaped by its engineers at every level.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 7 -->
+  <div class="section" id="theories">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Ethics as Design — Ethical Theories</h2>
+    </div>
+
+    <p>Caroline Whitbeck argued that engineering design is a model for resolving moral problems — just as design problems have multiple acceptable solutions with different trade-offs, so do ethical dilemmas. Four ethical theories are used to navigate moral problems:</p>
+
+    <div class="grid-2">
+      <div class="type-card blue">
+        <div class="type-label">Utilitarianism</div>
+        Actions are good if they maximise overall human well-being (society, not just the individual). Uses cost–benefit analysis. Criticism: what benefits everyone may harm specific individuals; consequences are often unknowable in advance.
+      </div>
+      <div class="type-card green">
+        <div class="type-label">Duty Ethics (Deontology)</div>
+        Focus on following universal moral duties and rules regardless of consequences. Associated with Kant. Criticism: rigid rules can produce bad outcomes in unusual circumstances.
+      </div>
+      <div class="type-card purple">
+        <div class="type-label">Rights Ethics</div>
+        Moral action respects the fundamental rights of individuals. Engineers themselves hold rights (professional conscience, privacy, non-discrimination) that must not be violated by employers or society.
+      </div>
+      <div class="type-card teal">
+        <div class="type-label">Virtue Ethics</div>
+        Focuses on the character of the moral agent — being an honest, trustworthy, responsible engineer — rather than on rules or outcomes. Asks: "What would a person of good character do?"
+      </div>
+    </div>
+
+    <h3>Ethical Dilemmas</h3>
+    <p>Ethical dilemmas are situations in which moral reasons conflict, or in which applications of moral values are unclear. They arise because moral values are many, varied, and sometimes in competition. Key insight: most moral choices are <em>not</em> dilemmas — dilemmas are the hardest subset of moral decisions.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 8 — EXAM Q&A -->
+  <div class="section" id="exam">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Exam-Ready Q&amp;A (Based on Assignment 2)</h2>
+    </div>
+
+    <div class="exam-section">
+      <h3>Past Assignment Questions with Explanations</h3>
+
+      <div class="q-item">
+        <div class="q-text">Q1. An engineer reports serious safety violations to a regulatory authority after internal complaints were ignored, risking his job to protect public safety. This is an example of:</div>
+        <div class="q-ans">Answer: (c) Whistleblowing</div>
+        <div class="q-exp">He is informing a higher authority of unethical/illegal behaviour; he has exhausted internal channels (last resort); he has proximity and a clear need — all conditions of justified whistleblowing are met.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q2. Why did the anonymous source at Fairway Electric find it appropriate to blow the whistle? (options i–iv)</div>
+        <div class="q-ans">Answer: (c) ii and iv</div>
+        <div class="q-exp">ii — He felt it was his ethical duty to prevent consumers from bearing harm. iv — It was the only option left after management had already been informed and gave no response (Last Resort rule). Options i and iii relate to stopping the harmful activity via second-hand knowledge — proximity was through the engineers' report, but the primary motivations are ethical duty and last resort.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q3. What steps could Fairway Electric management have taken to prevent whistleblowing?</div>
+        <div class="q-ans">Answer: (d) ii, iii, v</div>
+        <div class="q-exp">ii — Willingness to admit mistakes publicly; iii — Openness and clear communication to curb issues in advance; v — Encouraging healthy dialogue and criticism. Options i (restricting access to managers), iv (evading ethics), and vi (restricting honest moral effort) are harmful and anti-ethical approaches.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q4. Mr. Prantik Sharma signed a legal agreement prohibiting him from sharing any information about a government project, including its location. This agreement is technically called:</div>
+        <div class="q-ans">Answer: (b) Non-disclosure Agreement (NDA)</div>
+        <div class="q-exp">An NDA is a legally binding contract preventing the sharing of confidential information. It is the standard mechanism for protecting trade secrets and sensitive project details.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q5. Mr. Sethi, Sr. Architect at Sigma Pvt. Ltd., secretly worked as part-time consultant for competitor eSPACE Architect without informing his employer. This is a case of:</div>
+        <div class="q-ans">Answer: (b) Conflict of Interest</div>
+        <div class="q-exp">He has an interest (consulting for a competitor) that, if pursued, could compromise his obligations to his primary employer Sigma Pvt. Ltd. This falls under "interests in other companies" — a classic conflict of interest scenario.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q6. Assertion: Confidentiality applies to engineering as well as other professions. Reason: When clients go to attorneys or doctors, only personal ethics (not professional codes) indicate confidentiality will be maintained.</div>
+        <div class="q-ans">Answer: (c) A is true but R is false</div>
+        <div class="q-exp">The Assertion is correct — confidentiality absolutely applies to engineering. The Reason is false — confidentiality is upheld by professional ethics codes and legal obligations, not merely by personal ethics.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q7. Trisha disclosed her company's proposed manpower for a project to her brother (working for a competing firm) during a family gathering. This is an act of:</div>
+        <div class="q-ans">Answer: (a) Breach of Confidentiality</div>
+        <div class="q-exp">Project manpower, layout, and design information are classified as confidential business information. Disclosing them — even unintentionally in a social setting — constitutes a breach of the company's confidentiality policy.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q8. What is the correct statement about confidentiality criteria in companies?</div>
+        <div class="q-ans">Answer: (c) There is no fixed criterion — what an employer considers confidential shall be kept confidential.</div>
+        <div class="q-exp">Confidentiality is employer-defined. There is no universal standard list of confidential items across all companies.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q9. Which of the following is correct regarding "Conflicting interests"?<br>
+        i. A person has two or more desires that cannot all be satisfied.<br>
+        ii. There is no suggestion it is morally wrong to pursue two or more desires.<br>
+        iii. When an interest, if pursued, could keep a professional from meeting one of his obligations.<br>
+        iv. There is a suggestion it is problematic to pursue two or more desires.<br>
+        v. It is often physically/economically possible to pursue all the conflicting interests.</div>
+        <div class="q-ans">Answer: (c) Only ii</div>
+        <div class="q-exp">"Conflicting interests" simply describes having desires that can't all be satisfied — statement ii correctly notes there's nothing morally wrong about this. Statements iii, iv, v describe "conflict of interest" (the professional/ethical concept), not merely "conflicting interests." Statement i is partially correct but combined with iii in option (a), making only ii as a standalone the precise answer.</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-text">Q10. "Working environment, ethical values widely acknowledged, conducive to morally responsible conduct." Identify the context:</div>
+        <div class="q-ans">Answer: (d) Ethical corporate climate</div>
+        <div class="q-exp">This is the textbook definition of an ethical corporate climate — a working environment where ethical values are widely acknowledged and that promotes morally responsible conduct.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK SUMMARY BOX -->
+  <div class="card" style="margin-top: 2rem; border-left: 4px solid var(--accent);">
+    <div class="card-title" style="color: var(--accent); font-size: 14px; margin-bottom: 0.75rem;">Week 2 — Key Takeaways at a Glance</div>
+    <ul class="bullet-list">
+      <li><span class="pill pill-blue">Confidentiality</span> Employer-defined; NDA is the legal tool; duty continues after leaving the job.</li>
+      <li><span class="pill pill-amber">Conflict of Interest</span> Three types: actual, potential, apparent. Avoid via company policy, consultation, and judgment.</li>
+      <li><span class="pill pill-blue">Competitive Bidding</span> Engineers are restricted from pure price-based bidding — it endangers public safety.</li>
+      <li><span class="pill pill-green">Whistleblowing</span> Use the 4-point rule (Need, Proximity, Capability, Last Resort). Can be anonymous or acknowledged.</li>
+      <li><span class="pill pill-blue">Rights</span> Professional conscience is the most fundamental right; also includes privacy, non-discrimination, recognition.</li>
+      <li><span class="pill pill-green">Corporate Climate</span> Ethical values acknowledged widely + open dialogue + moral tone from top management.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

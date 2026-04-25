@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 8 — Ethics in Engineering Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0b;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --teal: #1a5276;
+    --muted: #7f8c8d;
+    --rule: #d5cfc3;
+    --card-bg: #ffffff;
+    --highlight: #fef9e7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 340px; height: 340px;
+    border: 60px solid var(--accent);
+    border-radius: 50%;
+    opacity: .18;
+  }
+  .masthead-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    max-width: 700px;
+  }
+  .masthead h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .masthead-sub {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #bbb;
+    max-width: 540px;
+  }
+  .badge-row {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 32px;
+  }
+  .badge {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: .05em;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── TOPIC NAV ── */
+  .topic-nav {
+    background: var(--teal);
+    padding: 20px 32px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center;
+  }
+  .topic-nav a {
+    color: #cde;
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: .05em;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 3px;
+    transition: background .2s, color .2s;
+  }
+  .topic-nav a:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 52px 0 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .section-title span {
+    display: block;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 20px;
+  }
+
+  p { margin-bottom: 14px; font-size: 15px; }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .card.teal { border-left-color: var(--teal); }
+  .card.gold  { border-left-color: var(--gold); }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card p { font-size: 14px; margin: 0; }
+
+  /* ── DEFINITION BOX ── */
+  .def-box {
+    background: var(--highlight);
+    border: 1px solid #e8d98a;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+  .def-box strong { color: var(--gold); }
+
+  /* ── COMPARISON TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  thead { background: var(--teal); color: white; }
+  th { padding: 14px 16px; text-align: left; font-weight: 500; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: .05em; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafaf8; }
+
+  /* ── KEY ANSWER BOX ── */
+  .qa-block {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin: 22px 0;
+    font-size: 14px;
+  }
+  .qa-block .q { color: #aaa; margin-bottom: 6px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: .1em; }
+  .qa-block .a { color: var(--accent); font-weight: 500; font-size: 15px; margin-bottom: 6px; }
+  .qa-block .why { color: #ccc; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li {
+    padding: 8px 0 8px 28px;
+    border-bottom: 1px dashed var(--rule);
+    position: relative;
+    font-size: 14px;
+  }
+  .checklist li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .checklist li:last-child { border-bottom: none; }
+
+  /* ── HIGHLIGHT STRIP ── */
+  .strip {
+    background: var(--teal);
+    color: white;
+    padding: 24px 32px;
+    border-radius: 8px;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+  .strip strong { color: #9dd; }
+
+  /* ── SCORE BANNER ── */
+  .score-banner {
+    background: linear-gradient(135deg, #1a5276 0%, #0f0e0b 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 32px;
+    margin-top: 60px;
+  }
+  .score-banner h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px; }
+  .score-pill {
+    display: inline-block;
+    background: var(--accent);
+    padding: 8px 28px;
+    border-radius: 50px;
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 14px;
+  }
+  .score-banner p { color: #aaa; font-size: 14px; margin-top: 12px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: #666;
+    text-align: center;
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+  }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section { animation: fadeUp .5s ease both; }
+  .section:nth-child(1) { animation-delay: .05s; }
+  .section:nth-child(2) { animation-delay: .1s; }
+  .section:nth-child(3) { animation-delay: .15s; }
+  .section:nth-child(4) { animation-delay: .2s; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="container">
+    <div class="masthead-label">NPTEL · Ethics in Engineering Practice · Unit 11</div>
+    <h1>Week 8<br><em>Rights, Leadership<br>&amp; Organisational Ethics</em></h1>
+    <p class="masthead-sub">Comprehensive study notes covering benchmarking ethics, leadership styles, open-door policy, complaint procedures, ombudsman, and organisational culture — based on Assignment 8.</p>
+    <div class="badge-row">
+      <span class="badge">10 Questions</span>
+      <span class="badge">10/10 Score</span>
+      <span class="badge">Leadership Styles</span>
+      <span class="badge">Benchmarking</span>
+      <span class="badge">Open Door Policy</span>
+      <span class="badge">Ombudsman</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOPIC NAV -->
+<nav class="topic-nav">
+  <a href="#benchmarking">Benchmarking</a>
+  <a href="#open-door">Open Door Policy</a>
+  <a href="#org-culture">Org Culture</a>
+  <a href="#research">Types of Research</a>
+  <a href="#leadership">Leadership Styles</a>
+  <a href="#ombudsman">Ombudsman</a>
+  <a href="#complaint">Complaint Procedures</a>
+  <a href="#summary">Quick Summary</a>
+</nav>
+
+<div class="container">
+
+  <!-- ─── 1. BENCHMARKING ─── -->
+  <section class="section" id="benchmarking">
+    <div class="section-number">Topic 01 — Q1 &amp; Q8</div>
+    <h2 class="section-title">Benchmarking &amp; Reverse Engineering Ethics
+      <span>Measuring performance the right way</span>
+    </h2>
+
+    <p>Benchmarking is the practice of comparing an organisation's products, services, or processes against a recognised standard or competitor to identify areas for improvement. It is a legitimate and widely used business strategy.</p>
+
+    <div class="def-box">
+      <strong>Definition:</strong> Benchmarking — systematically comparing your performance metrics (e.g., conversion efficiency, production speed, quality) against industry best practices or direct competitors, to understand where you stand and where to improve.
+    </div>
+
+    <div class="qa-block">
+      <div class="q">Q1 · EXAM QUESTION</div>
+      <div class="a">A solar module manufacturer ______ the conversion efficiency of its products against other solar manufacturers on a global basis.</div>
+      <div class="why">✔ Answer: <strong>b) Benchmarks</strong> — The company is measuring/comparing its efficiency score against global competitors. This is benchmarking, not automating, predicting, or kaizening.</div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif; margin:24px 0 12px;">Texas Instruments (TI) Guidelines on Ethical Benchmarking</h3>
+    <p>TI's Office of Ethics explicitly permits several benchmarking and reverse-engineering practices. Knowing what is <em>not</em> acceptable is equally important.</p>
+
+    <table>
+      <thead>
+        <tr><th>✅ ACCEPTABLE (Ethical)</th><th>❌ NOT ACCEPTABLE (Unethical)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Searching for information through public resources (libraries, internet, public filings)</td>
+          <td>Colluding with competitors to fix prices or allocate markets/customers</td>
+        </tr>
+        <tr>
+          <td>Reading books and publications describing other companies</td>
+          <td>Using information obtained under non-disclosure without permission</td>
+        </tr>
+        <tr>
+          <td>Asking customers about equipment and prices of TI competitors</td>
+          <td>Hiring employees specifically to extract trade secrets</td>
+        </tr>
+        <tr>
+          <td>Purchasing competitor products and legally reverse-engineering them</td>
+          <td>Misrepresenting your identity while gathering information</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="qa-block">
+      <div class="q">Q8 · EXAM QUESTION (Identify the WRONG statement)</div>
+      <div class="a">Texas Instruments guidelines on acceptable benchmarking — identify the wrong statement.</div>
+      <div class="why">✔ Answer: <strong>d) Colluding in fixing prices or allocating markets or customers</strong> — This is explicitly prohibited as it violates antitrust law and is deeply unethical. All other options (a, b, c) are legitimate practices TI permits.</div>
+    </div>
+  </section>
+
+  <!-- ─── 2. OPEN DOOR POLICY ─── -->
+  <section class="section" id="open-door">
+    <div class="section-number">Topic 02 — Q2 &amp; Q4</div>
+    <h2 class="section-title">Open Door Policy
+      <span>Organisational accessibility and its trade-offs</span>
+    </h2>
+
+    <p>An <strong>Open Door Policy</strong> is a management practice where leaders (managers, executives) keep their office doors metaphorically — and sometimes literally — open to employees at any level, welcoming direct communication without requiring formalities.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Purpose 1</h3>
+        <p>Encourages employees to voice workplace concerns, questions, or suggestions <em>outside their own chain of command</em> without fear.</p>
+      </div>
+      <div class="card teal">
+        <h3>Purpose 2</h3>
+        <p>Develops employee trust and ensures important information and feedback reaches decision-making managers.</p>
+      </div>
+      <div class="card gold">
+        <h3>Purpose 3</h3>
+        <p>Brings a culture of equality and empowerment — any employee can openly discuss issues with senior members.</p>
+      </div>
+    </div>
+
+    <div class="strip">
+      <strong>⚠ Common Misconception:</strong> An open door policy is NOT a metaphor for the "glass ceiling" — the invisible barrier preventing minorities and women from career advancement. That is a completely different concept. This misrepresentation was the correct answer in Q2.
+    </div>
+
+    <div class="qa-block">
+      <div class="q">Q2 · EXAM QUESTION (Choose the MISREPRESENTED option)</div>
+      <div class="a">Purpose of open door policy — pick the misrepresented one.</div>
+      <div class="why">✔ Answer: <strong>c)</strong> — "It is a metaphor for the evident but intangible hierarchical impediment that prevents minorities and women from achieving elevated professional success." This describes the <em>glass ceiling</em>, not the open door policy.</div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif; margin:24px 0 12px;">Drawbacks of Open Door Policy</h3>
+
+    <div class="qa-block">
+      <div class="q">Q4 · EXAM QUESTION</div>
+      <div class="a">What is a drawback of the open door policy?</div>
+      <div class="why">✔ Answer: <strong>b)</strong> — There could be constant interruptions which prevent the leader from thinking deeply and serving the team in the desired ways. Note: Options a &amp; c are actually <em>benefits</em>, not drawbacks. Only (b) identifies a genuine downside.</div>
+    </div>
+
+    <table>
+      <thead><tr><th>Benefits</th><th>Drawbacks</th></tr></thead>
+      <tbody>
+        <tr><td>Encourages effective communication between employees and management</td><td><strong>Constant interruptions</strong> prevent deep thinking and focused leadership</td></tr>
+        <tr><td>Helps employees who were victimised or harassed get recourse</td><td>May undermine the immediate supervisor's authority</td></tr>
+        <tr><td>Builds trust, transparency, and a flat culture</td><td>Time-consuming for senior leaders managing large teams</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─── 3. ORGANISATIONAL CULTURE ─── -->
+  <section class="section" id="org-culture">
+    <div class="section-number">Topic 03 — Q3</div>
+    <h2 class="section-title">Organisational Culture &amp; Value Orientation
+      <span>What a company truly stands for</span>
+    </h2>
+
+    <p>Every organisation has a <strong>value orientation</strong> — a set of core principles that shape how it treats employees, customers, and stakeholders. Understanding value orientation helps identify what drives organisational decisions.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Shareholder Value</h3>
+        <p>Organisation exists primarily to maximise returns to investors. Profit is the chief metric.</p>
+      </div>
+      <div class="card teal">
+        <h3>People Orientation</h3>
+        <p>Employees are the central concern. Culture emphasises empathy, recognition, engagement, and individual success.</p>
+      </div>
+      <div class="card gold">
+        <h3>Finance Orientation</h3>
+        <p>Focus on financial performance, cost control, and revenue growth above other considerations.</p>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q">Q3 · EXAM QUESTION (Case Study — Tokai Bean)</div>
+      <div class="a">Tokai Bean (freshly ground coffee chain) — high empathy, good interpersonal relations, recognition for good work, constructive feedback, employee engagement, employee success taken seriously. What value orientation does this represent?</div>
+      <div class="why">✔ Answer: <strong>b) People Orientation</strong> — Every described characteristic (empathy, recognition, praise, engagement, employee success) points to a strong people-first culture, not finance or shareholder focus.</div>
+    </div>
+
+    <div class="def-box">
+      <strong>Key Insight:</strong> People-oriented organisations invest in human capital as their primary source of competitive advantage. They believe that engaged, respected employees naturally deliver better products and services — creating a virtuous cycle.
+    </div>
+  </section>
+
+  <!-- ─── 4. TYPES OF RESEARCH ─── -->
+  <section class="section" id="research">
+    <div class="section-number">Topic 04 — Q5</div>
+    <h2 class="section-title">Types of Research &amp; Publication Rights
+      <span>When knowledge cannot be freely shared</span>
+    </h2>
+
+    <table>
+      <thead><tr><th>Type</th><th>Description</th><th>Can Be Published?</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Classified (Confidential)</strong></td>
+          <td>Research conducted under government, military, or corporate secrecy agreements. Contains sensitive, proprietary, or national-security information.</td>
+          <td style="color:var(--accent);font-weight:600;">No — cannot be published</td>
+        </tr>
+        <tr>
+          <td><strong>Empirical</strong></td>
+          <td>Based on observation and experiment; data-driven. Standard in science and social science.</td>
+          <td style="color:green;">Yes — publishable</td>
+        </tr>
+        <tr>
+          <td><strong>Exploratory</strong></td>
+          <td>Preliminary investigation of a new topic without firm hypotheses. Seeks patterns and insights.</td>
+          <td style="color:green;">Yes — publishable</td>
+        </tr>
+        <tr>
+          <td><strong>Non-experimental</strong></td>
+          <td>Observational research without manipulating variables (surveys, case studies).</td>
+          <td style="color:green;">Yes — publishable</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="qa-block">
+      <div class="q">Q5 · EXAM QUESTION</div>
+      <div class="a">______ research cannot be published, of course.</div>
+      <div class="why">✔ Answer: <strong>a) Classified (Confidential)</strong> — Classified research is legally and ethically restricted from publication. It may involve national security, trade secrets, or proprietary technology that cannot be publicly disclosed.</div>
+    </div>
+
+    <p>This is an important ethical point for engineers: when working on government contracts or under NDAs, publishing research — even in academic papers — without clearance is a serious breach of professional ethics and potentially illegal.</p>
+  </section>
+
+  <!-- ─── 5. LEADERSHIP STYLES ─── -->
+  <section class="section" id="leadership">
+    <div class="section-number">Topic 05 — Q6 &amp; Q10</div>
+    <h2 class="section-title">Leadership Styles &amp; Ethical Conduct
+      <span>How leaders influence and motivate</span>
+    </h2>
+
+    <table>
+      <thead>
+        <tr><th>Style</th><th>Core Mechanism</th><th>Key Characteristics</th><th>Ethical Dimension</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Transactional</strong></td>
+          <td>Exchange / reward-punishment</td>
+          <td>Sets clear goals; offers rewards for compliance; uses contingent reinforcement</td>
+          <td>Neutral — can be ethical or manipulative depending on use</td>
+        </tr>
+        <tr>
+          <td><strong>Authentic</strong></td>
+          <td>Self-awareness &amp; transparency</td>
+          <td>Genuine, values-driven, consistent behaviour; builds trust over time</td>
+          <td>High — deeply ethical by design</td>
+        </tr>
+        <tr>
+          <td><strong>Charismatic</strong></td>
+          <td>Inspirational vision</td>
+          <td>Personal charm, emotional appeal, strong vision; followers are inspired</td>
+          <td>Mixed — charisma can be used for good or ill</td>
+        </tr>
+        <tr>
+          <td><strong>Vulnerable</strong></td>
+          <td>Openness &amp; humility</td>
+          <td>Acknowledges mistakes, asks for help, fosters psychological safety</td>
+          <td>High — promotes honest cultures</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="qa-block">
+      <div class="q">Q6 · EXAM QUESTION</div>
+      <div class="a">Politicians who win votes by promising "low taxes" are demonstrating ______ leadership.</div>
+      <div class="why">✔ Answer: <strong>a) Transactional</strong> — They offer a tangible reward (lower taxes) in exchange for votes. This is a classic transactional exchange: "Give me your support, I'll give you something in return." No deep values or vision is involved — it's a transaction.</div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif; margin:28px 0 12px;">Universal Features of ALL Leadership Styles</h3>
+    <p>Despite their differences, all leadership styles share these four characteristics:</p>
+
+    <ul class="checklist">
+      <li><strong>S1:</strong> Leadership occurs in groups and involves common goals.</li>
+      <li><strong>S2:</strong> Leadership is a process and involves non-coercive influence — leaders persuade, not force.</li>
+      <li><strong>S3:</strong> Leaders may also get influenced from their followers (bidirectional influence).</li>
+      <li><strong>S4:</strong> Leaders direct energies toward individuals trying to achieve something together — leaders and followers share a mutual purpose.</li>
+    </ul>
+
+    <div class="qa-block">
+      <div class="q">Q10 · EXAM QUESTION</div>
+      <div class="a">Common features of all leadership styles — identify the correct option.</div>
+      <div class="why">✔ Answer: <strong>d) All of the above statements are correct</strong> — All four statements (S1 through S4) are universally true across every leadership style.</div>
+    </div>
+  </section>
+
+  <!-- ─── 6. OMBUDSMAN ─── -->
+  <section class="section" id="ombudsman">
+    <div class="section-number">Topic 06 — Q7</div>
+    <h2 class="section-title">Ombudsman
+      <span>The independent complaint investigator</span>
+    </h2>
+
+    <div class="def-box">
+      <strong>Ombudsman</strong> — A Scandinavian word meaning an "officer" or "commissioner" appointed to investigate complaints (usually lodged by private citizens) against businesses, government agencies, or other organisations. Acts as an independent, impartial mediator.
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Independence</h3>
+        <p>An ombudsman operates independently of the organisation they investigate, ensuring impartiality.</p>
+      </div>
+      <div class="card teal">
+        <h3>Accessibility</h3>
+        <p>Citizens/employees can directly approach the ombudsman without going through hierarchical channels.</p>
+      </div>
+      <div class="card gold">
+        <h3>Investigation Power</h3>
+        <p>Has the authority to investigate, review documents, and recommend corrective action.</p>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>Term</th><th>Meaning</th><th>Key Difference</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ombudsman</strong></td><td>Independent officer investigating complaints against organisations</td><td>Investigates and recommends; doesn't adjudicate</td></tr>
+        <tr><td><strong>Arbitrator</strong></td><td>Neutral third party who hears disputes and makes a binding decision</td><td>Has decision-making authority; decision is final</td></tr>
+        <tr><td><strong>Conciliation</strong></td><td>A process where a conciliator brings parties together to help them reach a voluntary settlement</td><td>Non-binding; focuses on mutual agreement</td></tr>
+        <tr><td><strong>Hoshin Planning</strong></td><td>Strategic planning method aligning company goals with employee actions</td><td>A management/strategy tool, not a dispute mechanism</td></tr>
+      </tbody>
+    </table>
+
+    <div class="qa-block">
+      <div class="q">Q7 · EXAM QUESTION</div>
+      <div class="a">Scandinavian word meaning an officer or commissioner, appointed to investigate complaints (usually lodged by private citizens) against businesses — these concepts are associated with ______.</div>
+      <div class="why">✔ Answer: <strong>a) Ombudsman</strong> — The Scandinavian origin and the role of investigating citizen complaints against organisations is the defining characteristic of an Ombudsman.</div>
+    </div>
+  </section>
+
+  <!-- ─── 7. COMPLAINT PROCEDURES ─── -->
+  <section class="section" id="complaint">
+    <div class="section-number">Topic 07 — Q9</div>
+    <h2 class="section-title">Complaint Procedures
+      <span>Formal frameworks for raising workplace concerns</span>
+    </h2>
+
+    <p>A well-designed <strong>complaint procedure</strong> within an organisation ensures that employees can raise issues safely, fairly, and with confidence that they will be addressed. The following four characteristics define an effective complaint procedure:</p>
+
+    <ul class="checklist">
+      <li><strong>Protection from Reprisal:</strong> All who raise issues or give evidence must be protected from retaliation — this is the foundation of a psychologically safe workplace.</li>
+      <li><strong>Availability of Channels:</strong> The organisation must continually emphasise and communicate the existence of complaint channels to all employees.</li>
+      <li><strong>Formal Guarantees:</strong> Formal procedures must guarantee the process without creating a legalistic atmosphere that discourages use.</li>
+      <li><strong>Top Management Commitment:</strong> Top management must display continuing commitment and involvement in the process, demonstrating that complaints are taken seriously.</li>
+    </ul>
+
+    <div class="qa-block">
+      <div class="q">Q9 · EXAM QUESTION</div>
+      <div class="a">"All who raise issues must be protected from reprisal. Organisation must emphasise availability of channels. Formal procedures must guarantee the process. Top management must display commitment." — These statements delineate the characteristics of ______.</div>
+      <div class="why">✔ Answer: <strong>a) Complaint Procedures</strong> — These four pillars specifically describe the design principles of formal organisational complaint procedures, not publication, social media, or disciplinary procedures.</div>
+    </div>
+
+    <div class="strip">
+      <strong>Why this matters for engineers:</strong> Engineers often witness safety violations, ethical breaches, or harassment. Knowing how complaint procedures work — and that they are legally required to protect the complainant — empowers engineers to speak up without fear of professional retaliation.
+    </div>
+  </section>
+
+  <!-- ─── SUMMARY ─── -->
+  <section class="section" id="summary">
+    <div class="section-number">Quick Revision</div>
+    <h2 class="section-title">Assignment 8 — Answer Key Summary
+      <span>All 10 questions at a glance</span>
+    </h2>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Question Topic</th><th>Correct Answer</th><th>Key Concept</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Solar manufacturer comparing efficiency globally</td><td><strong>b) Benchmarks</strong></td><td>Benchmarking = comparing performance against competitors</td></tr>
+        <tr><td>2</td><td>Purpose of open door policy (misrepresented)</td><td><strong>c) Glass ceiling metaphor</strong></td><td>Open door ≠ glass ceiling; they are different concepts</td></tr>
+        <tr><td>3</td><td>Tokai Bean's value orientation</td><td><strong>b) People Orientation</strong></td><td>Empathy + employee success = people-oriented culture</td></tr>
+        <tr><td>4</td><td>Drawback of open door policy</td><td><strong>b) Constant interruptions</strong></td><td>Leaders can't think deeply if constantly interrupted</td></tr>
+        <tr><td>5</td><td>Which research cannot be published</td><td><strong>a) Classified (Confidential)</strong></td><td>Classified = legally restricted from publication</td></tr>
+        <tr><td>6</td><td>Politicians promising "low taxes" leadership style</td><td><strong>a) Transactional</strong></td><td>Exchange-based: votes in return for policy promises</td></tr>
+        <tr><td>7</td><td>Scandinavian officer investigating complaints</td><td><strong>a) Ombudsman</strong></td><td>Independent investigator for citizen complaints</td></tr>
+        <tr><td>8</td><td>TI benchmarking guideline — wrong statement</td><td><strong>d) Colluding to fix prices</strong></td><td>Price-fixing is illegal/unethical, not acceptable</td></tr>
+        <tr><td>9</td><td>Characteristics described (protection, channels, formal, top mgmt)</td><td><strong>a) Complaint Procedures</strong></td><td>4 pillars of effective complaint procedures</td></tr>
+        <tr><td>10</td><td>Common features of all leadership styles</td><td><strong>d) All statements correct</strong></td><td>S1–S4 are universal across all leadership styles</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<!-- SCORE BANNER -->
+<div class="score-banner">
+  <h2>Assignment 8 Result</h2>
+  <p>Submitted: 2026-04-13 · Due: 2026-04-15</p>
+  <div class="score-pill">10 / 10</div>
+  <p>Perfect score! All answers correct.</p>
+</div>
+
+<footer>
+  NPTEL · Ethics in Engineering Practice · noc26_mg42 · Week 8 Notes · gaurang.cs24@bmsce.ac.in
+</footer>
+
+</body>
+</html>
